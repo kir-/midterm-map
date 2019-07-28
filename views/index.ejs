@@ -3,18 +3,63 @@
   <head>
     <title>Home Page</title>
     <% include ./partials/_header %>
-    <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
-    <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
-    <link rel="stylesheet" href="/styles/layout.css" type="text/css" />
-
-    <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
-    <script type="text/javascript" src="/scripts/app.js"></script>
   </head>
-
 
   <body>
     <h1>Hello World!</h1>
 
+    <div id='toShowLoc'>
+      <button id='showGeolocation'>Show Geolocation</button>
+    </div>
+
+    
+
+    <div class="map"></div>
+    <button id="showmap">showmap</button>
+
+    <form action="https://maps.googleapis.com/maps/api/place/findplacefromtext/json?" method="POST">
+      <p>find place by name</p>
+      <input type="text" name="input" id="" placeholder="Name of destination">
+      <input type="text" name="inputtype" id="" value='textquery'>
+
+      <input type="text" name="input" id="" placeholder="Name of destination">
+      <input type="text" name="inputtype" id="" value='phonenumber'>
+
+      <input type="text" name="fields" id="" >
+      formatted_address, 
+      geometry, 
+      icon,name, 
+      permanently_closed, 
+      photos, 
+      place_id,plus_code, 
+      types
+      opening_hours
+      price_level, 
+      rating, 
+      user_ratings_total
+
+
+      <input type="text" name='locationbias'>
+      <input type="text" name='key'>
+    </form>
+
+
+    <form action="https://maps.googleapis.com/maps/api/place/nearbysearch/json">
+      <p>nearby search</p>
+      <input type="text" name='keyword'>
+      <input type="text" name='minprice'>
+      <input type="text" name='maxprice'>
+
+      <input type="text" name='key'>
+
+      location:lat,long
+      radius 
+      open now 
+      keyword
+      rankby: prominence, distance, 
+      type
+    </form>
+    
 
 
 
@@ -25,6 +70,9 @@
 
 
 
+    <a href="
+    https://developers.google.com/places/web-service/search
+    ">google api: https://developers.google.com/places/web-service/search</a>
     <% include ./partials/_footer %>
   </body>
 </html>
