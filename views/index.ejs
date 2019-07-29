@@ -14,49 +14,50 @@
 
     
 
-    <div class="map"></div>
-    <button id="showmap">showmap</button>
+    <div class='add_map d-flex flex-row-reverse'>
+      <button class='btn'>Add new  map</button>
+    </div>
+    <section class='map-element mx-auto'>
+      <p class='map-name'>map name:</p>
+      <div class="row map-row">
+          <div class="map col-6">
+              <button id="showmap">showmap</button>
+          </div>
+          <div class='col-6 marked-places'>
+            <p>marked places</p>  
 
-    <form action="https://maps.googleapis.com/maps/api/place/findplacefromtext/json?" method="POST">
-      <p>find place by name</p>
-      <input type="text" name="input" id="" placeholder="Name of destination">
-      <input type="text" name="inputtype" id="" value='textquery'>
+            <section class='row marked-place'>
+              <div class='place-imgs col-3'></div>
+              <div class='place-details col-9'>
+                <p>some text</p>
+                <p>some text</p>
+                <p>some text</p>
+              </div>
+            </section>
 
-      <input type="text" name="input" id="" placeholder="Name of destination">
-      <input type="text" name="inputtype" id="" value='phonenumber'>
+          </div>
+      </div>
+      <div class='edit d-flex flex-row-reverse'>
+          <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#searchForm" aria-expanded="false" aria-controls="collapseExample">
+              Edit
+            </button>
+          </div>
+            <div class="collapse" id="searchForm">
+              <div class='row'>
+                <form class='col-5'>
+                    <div class="form-group">
+                      <label for="findPlaces">Find Places</label>
+                      <input type="email" class="form-control" name='textQuery'  id="findPlaces" placeholder="Enter places">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+              </div>
+            </div>
 
-      <input type="text" name="fields" id="" >
-      formatted_address, 
-      geometry, 
-      icon,name, 
-      permanently_closed, 
-      photos, 
-      place_id,plus_code, 
-      types
-      opening_hours
-      price_level, 
-      rating, 
-      user_ratings_total
-      <input type="text" name='locationbias'>
-      <input type="text" name='key'>
-    </form>
+
+    </section>
 
 
-    <form action="https://maps.googleapis.com/maps/api/place/nearbysearch/json">
-      <p>nearby search</p>
-      <input type="text" name='keyword'>
-      <input type="text" name='minprice'>
-      <input type="text" name='maxprice'>
-
-      <input type="text" name='key'>
-
-      location:lat,long
-      radius 
-      open now 
-      keyword
-      rankby: prominence, distance, 
-      type
-    </form>
     
 
 
@@ -65,12 +66,6 @@
 
 
 
-
-
-
-    <a href="
-    https://developers.google.com/places/web-service/search
-    ">google api: https://developers.google.com/places/web-service/search</a>
     <% include ./partials/_footer %>
   </body>
 </html>
