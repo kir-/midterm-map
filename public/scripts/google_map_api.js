@@ -43,13 +43,36 @@ $(() => {
     });
   };
 
+  const displayPlaces = function(placeObj) {
+    for (let place in placeObj) {
+      $.ajax({
+        method: 'POST',
+        url: `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photoReference}&key=AIzaSyCS2HA8sY280xwjwAZbVRoA5hIzfDg41xM`
+      }).done((url)=>{
+        const markup = `
+        <div class = "card" style = "width: 18rem;">
+          <img class="card-img-top" src=${url} alt="image">
+            <div class='card-body'>
+            <h5 class="card-title">${place.placeName}</h5>
+            <span class="badge badge-pill badge-info">${place.type[0]}</span>
+            <ul class="list-group list-group-flush">
+              <li class="list-group-item">Rating: ${place.rating}</li>
+              <li class="list-group-item">${place.formattedAddress}</li>
+            </ul>
+            </div>
+        </div>
+        `;
+      });
+    }
+  };
+
   $showGeolocation = $('#showGeolocation');
   $showGeolocation.on('click', (event) => {
     event.preventDefault();
     getGeolocation((location) => {
-      $(`<div>${'lat: ' + location.lat + ',' + 'lng: ' + location.lng}</div>`).appendTo('#toShowLoc')
-    })
-  })
+      $(`<div>${'lat: ' + location.lat + ',' + 'lng: ' + location.lng}</div>`).appendTo('#toShowLoc');
+    });
+  });
 
   $showmap = $('#showmap');
   $showmap.on('click', (even) => {
@@ -59,19 +82,18 @@ $(() => {
 
     getGeolocation((location)=>{
       loadMap(location,mapElement);
-    })
-  })
+    });
+  });
 
   $('.findPlaces').on('submit', (event) => {
     event.preventDefault();
-    const markup =`
-    <section class='place-viewer mx-auto'> 
+    getPlaces($('.textQuery').val());
+    const markup = `
+    <section class='place-viewer mx-auto'>
     </section>
     `;
-    const element = $('<div>').addClass('display-places-options')
-    element.html(markup)
-    element.appendTo('body')
-  })
-
-
-})
+    const element = $('<div>').addClass('display-places-options');
+    element.html(markup);
+    element.appendTo('body');
+  });
+});
