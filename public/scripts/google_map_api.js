@@ -16,9 +16,32 @@ $(() => {
       method:'POST',
       url:'https://www.googleapis.com/geolocation/v1/geolocate?key=AIzaSyCS2HA8sY280xwjwAZbVRoA5hIzfDg41xM'
     }).done((location) => {
-      callback(location.location)
-    })
-  }
+      callback(location.location);
+    });
+  };
+
+  const getPlaces  = function(options ,callback) {
+    const urlOption = options.split(' ').join('&');
+    $.ajax({
+      method: 'POST',
+      url: `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?query=${urlOption}&key=AIzaSyCS2HA8sY280xwjwAZbVRoA5hIzfDg41xM`
+    }).done((placeList) => {
+      let placeObj = {};
+      placeList.results.forEach(element => {
+        placeObj[element.place_id] = {
+          placeId: element.place_id,
+          placeName: element.name,
+          rating: element.rating,
+          formattedAddress: element.formatted_address,
+          long: element.geometry.location.lng,
+          lat: element.geometry.location.lat,
+          photoReference: element.photo_reference,
+          type: element.type
+        };
+      });
+      callback(placeObj);
+    });
+  };
 
   $showGeolocation = $('#showGeolocation');
   $showGeolocation.on('click', (event) => {
@@ -27,8 +50,6 @@ $(() => {
       $(`<div>${'lat: ' + location.lat + ',' + 'lng: ' + location.lng}</div>`).appendTo('#toShowLoc')
     })
   })
-
-  
 
   $showmap = $('#showmap');
   $showmap.on('click', (even) => {
