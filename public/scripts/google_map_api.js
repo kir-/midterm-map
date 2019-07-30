@@ -43,13 +43,13 @@ $(() => {
     });
   };
 
-  $showGeolocation = $('#showGeolocation');
-  $showGeolocation.on('click', (event) => {
-    event.preventDefault();
-    getGeolocation((location) => {
-      $(`<div>${'lat: ' + location.lat + ',' + 'lng: ' + location.lng}</div>`).appendTo('#toShowLoc')
-    })
-  })
+  // $showGeolocation = $('#showGeolocation');
+  // $showGeolocation.on('click', (event) => {
+  //   event.preventDefault();
+  //   getGeolocation((location) => {
+  //     $(`<div>${'lat: ' + location.lat + ',' + 'lng: ' + location.lng}</div>`).appendTo('#toShowLoc')
+  //   })
+  // })
 
   $showmap = $('#showmap');
   $showmap.on('click', (even) => {

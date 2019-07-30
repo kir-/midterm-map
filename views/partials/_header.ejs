@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <title>Home Page</title>
-    
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
       <link rel="stylesheet" href="/vendor/normalize-4.1.1.css" type="text/css" />
       <link rel="stylesheet" href="/vendor/border-box.css" type="text/css" />
@@ -16,6 +16,7 @@
       <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCS2HA8sY280xwjwAZbVRoA5hIzfDg41xM"></script>
       <script type="text/javascript" src="/scripts/app.js"></script>
       <script type="text/javascript" src="/scripts/google_map_api.js"></script>
+      <script type="text/javascript" src="/scripts/authentication.js"></script>
   </head>
 
   <body>
@@ -41,10 +42,11 @@
                 </div>
               </li>
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-              <input class="form-control mr-sm-2" type="test" placeholder="Username">
-              <input class="form-control mr-sm-2" type="password" placeholder="Password">
+            <form class="form-inline my-2 my-lg-0 login-form">
+              <input class="form-control mr-sm-2" name='username' id='username' type="test" placeholder="Username">
+              <input class="form-control mr-sm-2" name='password' id='password'type="password" placeholder="Password">
               <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
             </form>
+            <button class='btn btn-outline-danger ml-2 log-out my-2 my-sm-0'>logout</button>
           </div>
         </nav>
