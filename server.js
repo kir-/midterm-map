@@ -51,6 +51,23 @@ app.get("/", (req, res) => {
   res.render("index");
 });
 
+
+app.post("/login", (req,res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  db.query(`
+  SELECT * 
+  FROM users
+  Where name=$1 AND password=$2;
+  `, [username, password]).then((response) => {
+    if(response.rows.length) {
+      res.send('authorized')
+    } else {
+      res.send('unauthorized')
+    }
+  })
+})
+
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 });
