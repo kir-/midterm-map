@@ -34,6 +34,7 @@ html, body {
   left: 0%;
 }
 
+
 .place-imgs {
   background-image: url("/images/example.jpg");
   background-size: cover;
@@ -47,4 +48,9 @@ html, body {
   height: 50%;
   margin-top: 10%;
   overflow:scroll;
+}
+
+.close-display-layer {
+  z-index: 1;
+  position: relative;
 }

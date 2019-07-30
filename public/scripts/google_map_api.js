@@ -67,11 +67,14 @@ $(() => {
     const markup =`
     <section class='place-viewer mx-auto'> 
     </section>
+    <button class='close-display-layer btn mx-auto'>Exit</button>
     `;
     const element = $('<div>').addClass('display-places-options')
     element.html(markup)
     element.appendTo('body')
+    $('.close-display-layer').on('click' ,() => {
+      $('.display-places-options').remove();
+    })
   })
-
 
 })
