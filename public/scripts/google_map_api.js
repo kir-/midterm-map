@@ -41,6 +41,16 @@ $(() => {
     })
   })
 
-  
+  $('.findPlaces').on('submit', (event) => {
+    event.preventDefault();
+    const markup =`
+    <section class='place-viewer mx-auto'> 
+    </section>
+    `;
+    const element = $('<div>').addClass('display-places-options')
+    element.html(markup)
+    element.appendTo('body')
+  })
+
 
 })
