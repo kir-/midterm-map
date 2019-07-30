@@ -54,3 +54,11 @@ html, body {
   z-index: 1;
   position: relative;
 }
+
+nav {
+  background-color: rgba(0, 0, 0, 0.8)
+}
+
+main {
+  margin-top: 120px;
+}
