@@ -91,6 +91,31 @@ app.post("/login", (req,res) => {
   });
 });
 
+app.post('/map_info', (req,res) => {
+  const mapId = req.body.mapId;
+  console.log(mapId)
+  db.query(`
+  SELECT * 
+  FROM places JOIN place_on_map on (place_on_map.place_id = places.id)
+  WHERE place_on_map.map_id = $1;
+  `, [mapId]).then((response) => {
+    res.send(response.rows)
+  })
+})
+
+
+
+app.get('/maps', (req,res) => {
+  db.query(`
+  SELECT *
+  FROM maps
+  `).then((response) => {
+    res.send(response.rows)
+  })
+})
+
+
+
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 });
