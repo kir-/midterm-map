@@ -88,6 +88,9 @@ $(() => {
           const latitude = $(this).parent().parent().parent().children('.card-body').children('.lat').text();
           const place_id = $(this).parent().parent().parent().children('.card-body').children('.placeid').text();
           console.log(`name: ${name}\nimage: ${image}\ntypee: ${type}\nrating: ${rating}\naddress: ${address}\nlongitude: ${longitude}\nlatitude: ${latitude}\nplace id: ${place_id}`);
+          $(this).text('added');
+          $(this).removeClass().addClass('btn btn-success mt-2 add-place');
+          $(this).prop('disabled', true);
         });
       });
     }

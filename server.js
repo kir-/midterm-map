@@ -7,7 +7,6 @@ const ENV        = process.env.ENV || "development";
 const express    = require("express");
 const bodyParser = require("body-parser");
 const sass       = require("node-sass-middleware");
-const {loadMarkup, getPlaces} = require('./helper_functions.js');
 const request = require('request');
 const app        = express();
 const morgan     = require('morgan');
