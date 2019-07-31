@@ -32,16 +32,19 @@ $(() => {
       let placeList = JSON.parse(placeObject);
       let placeObj = {};
       placeList.results.forEach(element => {
-        placeObj[element.place_id] = {
-          placeId: element.place_id,
-          placeName: element.name,
-          rating: element.rating,
-          formattedAddress: element.formatted_address,
-          long: element.geometry.location.lng,
-          lat: element.geometry.location.lat,
-          photoReference: element.photos[0].photo_reference,
-          type: element.types
-        };
+        if (Object.keys(placeObj).length <= 40 && element.photos) {
+          console.log("test");
+          placeObj[element.place_id] = {
+            placeId: element.place_id,
+            placeName: element.name,
+            rating: element.rating,
+            formattedAddress: element.formatted_address,
+            long: element.geometry.location.lng,
+            lat: element.geometry.location.lat,
+            photoReference: element.photos[0].photo_reference,
+            type: element.types
+          };
+        }
       });
       callback(placeObj);
     });
