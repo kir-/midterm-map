@@ -33,7 +33,6 @@ $(() => {
       let placeObj = {};
       placeList.results.forEach(element => {
         if (Object.keys(placeObj).length <= 40 && element.photos) {
-          console.log("test");
           placeObj[element.place_id] = {
             placeId: element.place_id,
             placeName: element.name,
@@ -135,5 +134,7 @@ $(() => {
       $('.display-places-options').remove();
     });
   });
+
+
 
 });
