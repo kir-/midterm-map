@@ -115,7 +115,20 @@ $(() => {
           const latitude = $(this).parent().parent().parent().children('.card-body').children('.lat').text();
           const place_id = $(this).parent().parent().parent().children('.card-body').children('.placeid').text();
           console.log(`name: ${name}\nimage: ${image}\ntypee: ${type}\nrating: ${rating}\naddress: ${address}\nlongitude: ${longitude}\nlatitude: ${latitude}\nplace id: ${place_id}`);
-
+          $.ajax({
+            method: 'POST',
+            url: "/addplace",
+            data: {
+              name,
+              image,
+              type,
+              rating,
+              address,
+              longitude,
+              latitude,
+              place_id
+            }
+          });
           $(this).text('added');
           $(this).removeClass().addClass('btn btn-success mt-2 add-place');
           $(this).prop('disabled', true);
@@ -160,7 +173,7 @@ $(() => {
     });
 
   });
-  
+
   const getPlacesFromSql = function (map, callback) {
     $.ajax({
       method: "POST",
@@ -169,21 +182,21 @@ $(() => {
         "mapId" : map.id
       }
     }).done((places) => {
-      callback(map, places)
-    })
-  }
+      callback(map, places);
+    });
+  };
 
   const getmapsFromSql = function(callback) {
     $.ajax({
       method: "GET",
       url: "/maps",
     }).done((maps) => {
-      callback(maps)
+      callback(maps);
 
-      // const htmlElement = 
+      // const htmlElement =
       // const mapSection = $('<section>').addClass('map-element')
-    })
-  }
+    });
+  };
 
   const createHtml = function (map, places) {
     let html = `
@@ -194,7 +207,7 @@ $(() => {
           </div>
           <div class='col-6 marked-places'>
     `;
-    
+
     for (let place of places) {
       html += `
       <section class='row marked-place'>
@@ -227,48 +240,45 @@ $(() => {
               </form>
             </div>
         </div>
-    `
-    console.log(html)
+    `;
+    console.log(html);
     return html;
-
-
-
-  }
+  };
 
   const renderMapsections = function() {
     getmapsFromSql((maps) => {
 
       for (let map of maps) {
         getPlacesFromSql(map, (map, places) => {
-          console.log('check this out!!!')
-          console.log(map)
-          console.log(places)
+          console.log('check this out!!!');
+          console.log(map);
+          console.log(places);
 
-          
+
           // create html content
           const htmlElement = createHtml(map,places);
           // create element and add class
           const mapSection = $('<section>').addClass('map-element');
           // add html to section
-          mapSection.html(htmlElement)
-          // appened to target 
-          mapSection.appendTo('.main-section')
-          $('<br>').appendTo('.main-section')
+          mapSection.html(htmlElement);
+          // appened to target
+          mapSection.appendTo('.main-section');
+          $('<br>').appendTo('.main-section');
 
           // call showmap directly
 
 
           //add event listen
-          
 
-        })
+
+        });
       }
-      
-    })
-  }
-  renderMapsections()
 
- })
+    });
+  };
+  renderMapsections();
+
+
 
   $('.addMap').on('submit', (event)=>{
     event.preventDefault();
