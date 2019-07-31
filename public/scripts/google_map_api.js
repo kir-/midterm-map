@@ -123,13 +123,13 @@ $(() => {
     }
   };
 
-  $showGeolocation = $('#showGeolocation');
-  $showGeolocation.on('click', (event) => {
-    event.preventDefault();
-    getGeolocation((location) => {
-      $(`<div>${'lat: ' + location.lat + ',' + 'lng: ' + location.lng}</div>`).appendTo('#toShowLoc');
-    });
-  });
+  // $showGeolocation = $('#showGeolocation');
+  // $showGeolocation.on('click', (event) => {
+  //   event.preventDefault();
+  //   getGeolocation((location) => {
+  //     $(`<div>${'lat: ' + location.lat + ',' + 'lng: ' + location.lng}</div>`).appendTo('#toShowLoc');
+  //   });
+  // });
 
   $showmap = $('#showmap');
   $showmap.on('click', (event) => {
@@ -157,11 +157,120 @@ $(() => {
     $('.close-display-layer').on('click' ,() => {
       $('.display-places-options').remove();
     });
-  })
+
+  });
+  
+  const getPlacesFromSql = function (map, callback) {
+    $.ajax({
+      method: "POST",
+      url: "/map_info",
+      data: {
+        "mapId" : map.id
+      }
+    }).done((places) => {
+      callback(map, places)
+    })
+  }
+
+  const getmapsFromSql = function(callback) {
+    $.ajax({
+      method: "GET",
+      url: "/maps",
+    }).done((maps) => {
+      callback(maps)
+
+      // const htmlElement = 
+      // const mapSection = $('<section>').addClass('map-element')
+    })
+  }
+
+  const createHtml = function (map, places) {
+    let html = `
+      <p class='map-name'>map name: ${map.name}</p>
+      <div class="row map-row">
+          <div class="map col-6">
+          <div class='d-none'>${map.id}</div>
+          </div>
+          <div class='col-6 marked-places'>
+    `;
+    
+    for (let place of places) {
+      html += `
+      <section class='row marked-place'>
+      <div class='place-imgs col-3'></div>
+      <div class='place-details col-9'>
+        <p>${place.name}</p>
+        <p>rating: ${place.rating}</p>
+        <p>address: ${place.address}</p>
+      </div>
+    </section>
+      `
+    }
+    html += `
+    </div>
+      </div>
+        <div class='edit d-flex flex-row-reverse'>
+            <div class='mapid d-none'>${map.id}</div>
+            <button class="btn btn-primary mr-3 mt-2" type="button" data-toggle="collapse" data-target="#searchForm" aria-expanded="false" aria-controls="searchForm">
+                Edit
+            </button>
+        </div>
+          <div class="collapse" id="searchForm">
+            <div class='row'>
+              <form class='col-5 findPlaces'>
+                  <div class="form-group">
+                    <p>Find Places</p>
+                    <input type="text" class="form-control textQuery" name='textQuery' placeholder="Enter places">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+            </div>
+        </div>
+    `
+    console.log(html)
+    return html;
+
+
+
+  }
+
+  const renderMapsections = function() {
+    getmapsFromSql((maps) => {
+
+      for (let map of maps) {
+        getPlacesFromSql(map, (map, places) => {
+          console.log('check this out!!!')
+          console.log(map)
+          console.log(places)
+
+          
+          // create html content
+          const htmlElement = createHtml(map,places);
+          // create element and add class
+          const mapSection = $('<section>').addClass('map-element');
+          // add html to section
+          mapSection.html(htmlElement)
+          // appened to target 
+          mapSection.appendTo('.main-section')
+          $('<br>').appendTo('.main-section')
+
+          // call showmap directly
+
+
+          //add event listen
+          
+
+        })
+      }
+      
+    })
+  }
+  renderMapsections()
+
+ })
 
   $('.addMap').on('submit', (event)=>{
     event.preventDefault();
 
   });
-
 });
