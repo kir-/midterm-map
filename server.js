@@ -52,12 +52,17 @@ app.post("/markup", (req,res)=>{
   request.post(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${req.body.query}&key=AIzaSyCS2HA8sY280xwjwAZbVRoA5hIzfDg41xM`, function(error,response,body) {
     res.send(body);
   });
-
 });
 
 app.post("/loadimage", (req,res)=>{
   request.post(`https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference=${req.body.photoID}&key=AIzaSyCS2HA8sY280xwjwAZbVRoA5hIzfDg41xM`, function(error,response,body) {
     res.send(response.caseless.dict.location);
+  });
+});
+
+app.post("/addmap", (req,res)=>{
+  Pool.query(`INSERT INTO maps (name, longitude, latitude) VALUES ($1, $2, $3) RETURNING id`,[req.body.name, req.body.longitude, req.body.latitude]).then((mapID)=>{
+    Pool.query(`INSERT INTO permission (user_id, map_id, edit) VALUES ($1, $2, true)`, [req.body.user, mapID]);
   });
 });
 
@@ -70,17 +75,17 @@ app.post("/login", (req,res) => {
   const username = req.body.username;
   const password = req.body.password;
   db.query(`
-  SELECT * 
+  SELECT *
   FROM users
   Where name=$1 AND password=$2;
   `, [username, password]).then((response) => {
-    if(response.rows.length) {
-      res.send('authorized')
+    if (response.rows.length) {
+      res.send('authorized');
     } else {
-      res.send('unauthorized')
+      res.send('unauthorized');
     }
-  })
-})
+  });
+});
 
 app.post('/map_info', (req,res) => {
   const mapId = req.body.mapId;
