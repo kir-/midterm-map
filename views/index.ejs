@@ -1,12 +1,22 @@
 <% include ./partials/_header %>
 <main class='mx-auto'>
   <div class='d-flex justify-content-center mb-5'>
-    <button class='btn btn-success btn-lg'>Create/Join New  Map</button>
+    <button class='btn btn-success btn-lg' type="button" data-toggle="collapse" data-target="#map-id" aria-expanded="false" aria-controls="map-id">Create/Join New  Map</button>
   </div>
 
-  <!-- <div id='toShowLoc'>
-    <button id='showGeolocation'>Show Geolocation</button>
-  </div> -->
+  <div class="collapse" id="map-id">
+      <div class='row d-flex justify-content-center'>
+          <form class="form-inline map-id-submit" >
+              <div class="form-group mx-sm-3 mb-2">
+                <input type="text" class="form-control" id='id-input' name='map-id' placeholder="Enter map id">
+              </div>
+              <button type="submit" class="btn btn-success mb-2">Join/Create map</button>
+          </form>
+      </div>
+  </div>
+
+
+
 
 
   <section class='map-element'>
@@ -27,54 +37,8 @@
 
         </div>
     </div>
-<<<<<<< HEAD
-    <div class='edit d-flex flex-row-reverse'>
-        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#searchForm" aria-expanded="false" aria-controls="collapseExample">
-            Edit
-        </button>
-    </div>
-      <div class="collapse" id="searchForm">
-        <div class='row'>
-          <form class='col-5 findPlaces'>
-              <div class="form-group">
-                <p>Find Places</p>
-                <input type="text" class="form-control" name='textQuery' placeholder="Enter places">
-              </div>
-              <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
-        </div>
-    </div>
-  </section>
-</main>
-=======
-
-
-
-    <div class='add_map d-flex flex-row-reverse'>
-      <button class='btn'>Add new  map</button>
-    </div>
-    <section class='map-element mx-auto'>
-      <p class='map-name'>map name:</p>
-      <div class="row map-row">
-          <div class="map col-6">
-              <button id="showmap">showmap</button>
-          </div>
-          <div class='col-6 marked-places'>
-            <p>marked places</p>
-
-            <section class='row marked-place'>
-              <div class='place-imgs col-3'></div>
-              <div class='place-details col-9'>
-                <p>some text</p>
-                <p>some text</p>
-                <p>some text</p>
-              </div>
-            </section>
-
-          </div>
-      </div>
       <div class='edit d-flex flex-row-reverse'>
-          <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#searchForm" aria-expanded="false" aria-controls="collapseExample">
+          <button class="btn btn-primary mr-3 mt-2" type="button" data-toggle="collapse" data-target="#searchForm" aria-expanded="false" aria-controls="searchForm">
               Edit
           </button>
       </div>
@@ -90,8 +54,6 @@
           </div>
       </div>
     </section>
->>>>>>> render_css
-
 
 
 
