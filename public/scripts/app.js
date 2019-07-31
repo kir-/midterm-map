@@ -1,10 +1,9 @@
 $(() => {
-  $.ajax({
-    method: "GET",
-    url: "/api/users"
-  }).done((users) => {
-    for(user of users) {
-      $("<div>").text(user.name).appendTo($("body"));
-    }
-  });;
+  $('.map-id-submit').on('submit', (event) => {
+    event.preventDefault();
+    const mapId = $('#id-input').val()
+    console.log(mapId)
+  })
+
+
 });
