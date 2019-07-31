@@ -66,6 +66,10 @@ app.post("/addmap", (req,res)=>{
   });
 });
 
+app.post("/addplace",(req,res)=>{
+
+});
+
 app.get("/", (req, res) => {
   res.render("index");
 });
