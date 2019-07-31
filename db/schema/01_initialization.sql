@@ -45,10 +45,11 @@ CREATE TABLE places (
   lantitude INTEGER,
   longtitude INTEGER,
   rating INTEGER,
-  title VARCHAR(255),
-  phone VARCHAR(255),
-  description VARCHAR(1000),
-  image VARCHAR(1000)
+  name VARCHAR(255),
+  type VARCHAR(1000),
+  image VARCHAR(1000),
+  address VARCHAR(255),
+  place_id VARCHAR(255)
 );
 
 CREATE TABLE place_on_map (

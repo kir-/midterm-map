@@ -21,11 +21,15 @@ $(() => {
   };
 
   const getPlaces  = function(options ,callback) {
-    const urlOption = options.split(' ').join('&');
+    const urlOption = options.split(' ').join('+');
     $.ajax({
-      method: 'POST',
-      url: `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?query=${urlOption}&key=AIzaSyCS2HA8sY280xwjwAZbVRoA5hIzfDg41xM`
-    }).done((placeList) => {
+      method: "POST",
+      url: "/markup",
+      data: {
+        "query" : urlOption
+      }
+    }).done((placeObject) => {
+      let placeList = JSON.parse(placeObject);
       let placeObj = {};
       placeList.results.forEach(element => {
         placeObj[element.place_id] = {
@@ -35,8 +39,8 @@ $(() => {
           formattedAddress: element.formatted_address,
           long: element.geometry.location.lng,
           lat: element.geometry.location.lat,
-          photoReference: element.photo_reference,
-          type: element.type
+          photoReference: element.photos[0].photo_reference,
+          type: element.types
         };
       });
       callback(placeObj);
@@ -46,22 +50,45 @@ $(() => {
   const displayPlaces = function(placeObj) {
     for (let place in placeObj) {
       $.ajax({
-        method: 'POST',
-        url: `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${place.photoReference}&key=AIzaSyCS2HA8sY280xwjwAZbVRoA5hIzfDg41xM`
+        method: "POST",
+        url: "/loadimage",
+        data: {
+          "photoID" : placeObj[place].photoReference
+        }
       }).done((url)=>{
         const markup = `
-        <div class = "card" style = "width: 18rem;">
-          <img class="card-img-top" src=${url} alt="image">
+          <img class="card-img-top " src=${url} alt="image">
             <div class='card-body'>
-            <h5 class="card-title">${place.placeName}</h5>
-            <span class="badge badge-pill badge-info">${place.type[0]}</span>
+            <h5 class="card-title">${placeObj[place].placeName}</h5>
+            <span class="badge badge-pill badge-info">${placeObj[place].type[0]}</span>
             <ul class="list-group list-group-flush">
-              <li class="list-group-item">Rating: ${place.rating}</li>
-              <li class="list-group-item">${place.formattedAddress}</li>
+              <li class="list-group-item rating">Rating: ${placeObj[place].rating}</li>
+              <li class="list-group-item address">${placeObj[place].formattedAddress}</li>
             </ul>
+            </br>
+            <div class='d-flex justify-content-end'>
+            <button class='btn btn-outline-success mt-2 add-place'>add place</button>
             </div>
-        </div>
+            <p class='d-none long'>${placeObj[place].long}</p>
+            <p class='d-none lat'>${placeObj[place].lat}</p>
+            <p class='d-none placeid'>${placeObj[place].placeId}</p>
+            </div>
         `;
+        const element = $('<span>').addClass("card");
+        element.html(markup);
+        element.appendTo('.card-group');
+
+        $(".add-place").on('click',function() {
+          const name = $(this).parent().parent().parent().children('.card-body').children('.card-title').text();
+          const image = $(this).parent().parent().parent().children('.card-img-top').attr('src');
+          const type = $(this).parent().parent().parent().children('.card-body').children('.badge-info').text();
+          const rating = $(this).parent().parent().parent().children('.card-body').children('ul').children('.rating').text();
+          const address = $(this).parent().parent().parent().children('.card-body').children('ul').children('.address').text();
+          const longitude = $(this).parent().parent().parent().children('.card-body').children('.long').text();
+          const latitude = $(this).parent().parent().parent().children('.card-body').children('.lat').text();
+          const place_id = $(this).parent().parent().parent().children('.card-body').children('.placeid').text();
+          console.log(`name: ${name}\nimage: ${image}\ntypee: ${type}\nrating: ${rating}\naddress: ${address}\nlongitude: ${longitude}\nlatitude: ${latitude}\nplace id: ${place_id}`);
+        });
       });
     }
   };
@@ -87,15 +114,17 @@ $(() => {
 
   $('.findPlaces').on('submit', (event) => {
     event.preventDefault();
-    getPlaces($('.textQuery').val());
     const markup = `
     <section class='place-viewer mx-auto'>
+    <div class='card-group'>
+    </div>
     </section>
     <button class='close-display-layer btn mx-auto'>Exit</button>
     `;
     const element = $('<div>').addClass('display-places-options');
     element.html(markup);
     element.appendTo('body');
+    getPlaces($('.textQuery').val(),displayPlaces);
     $('.close-display-layer').on('click' ,() => {
       $('.display-places-options').remove();
     });

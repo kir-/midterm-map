@@ -45,7 +45,7 @@ html, body {
 
 .place-viewer {
   width: 80%;
-  height: 50%;
+  height: 59.5%;
   margin-top: 10%;
   overflow:scroll;
 }
@@ -54,6 +54,24 @@ html, body {
   z-index: 1;
   position: relative;
 }
+
+.add-place {
+  position: absolute;
+  bottom: 3px;
+  right: 5px;
+}
+
+.card {
+  width: 18rem;
+  min-width: 18rem !important;
+  max-width: 18rem !important;
+}
+
+.card-img-top{
+  object-fit: cover center;
+  height: 205px;
+}
+
 
 nav {
   background-color: rgba(0, 0, 0, 0.8)
