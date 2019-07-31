@@ -110,7 +110,6 @@ $(() => {
   $showmap.on('click', (even) => {
     const mapElement = $('.map')[0];
     let myloc;
-    // {lat: 49.2807762, lng: -123.022516000000}
 
     getGeolocation((location)=>{
       loadMap(location,mapElement);
