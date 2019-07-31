@@ -11,6 +11,31 @@ $(() => {
     });
   };
 
+  const createMap = function(query, name, userID) {
+    const queryParsed = query.split(' ').join('+');
+    $.ajax({
+      method: 'POST',
+      url: "/markup",
+      data: {
+        "query" : queryParsed
+      }
+    }).done((location)=>{
+      const keys = Object.keys(location);
+      if (keys) {
+        $.ajax({
+          method: 'POST',
+          url: '/addmap',
+          data: {
+            user: userID,
+            name: name,
+            longitude: location.keys[0].geometry.location.lng,
+            latitude: location.keys[0].geometry.location.lat
+          }
+        });
+      }
+    });
+  };
+
   const getGeolocation = function(callback) {
     $.ajax({
       method:'POST',
@@ -107,7 +132,7 @@ $(() => {
   });
 
   $showmap = $('#showmap');
-  $showmap.on('click', (even) => {
+  $showmap.on('click', (event) => {
     const mapElement = $('.map')[0];
     let myloc;
 
@@ -132,8 +157,11 @@ $(() => {
     $('.close-display-layer').on('click' ,() => {
       $('.display-places-options').remove();
     });
+  })
+
+  $('.addMap').on('submit', (event)=>{
+    event.preventDefault();
+
   });
-
-
 
 });
