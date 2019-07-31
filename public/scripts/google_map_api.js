@@ -131,35 +131,40 @@ $(() => {
   //   });
   // });
 
-  $showmap = $('#showmap');
-  $showmap.on('click', (event) => {
-    const mapElement = $('.map')[0];
-    let myloc;
+  // $showmap = $('#showmap');
+  // $showmap.on('click', (event) => {
+  //   const mapElement = $('.map')[0];
+  //   let myloc;
 
-    getGeolocation((location)=>{
-      loadMap(location,mapElement);
+  //   getGeolocation((location)=>{
+  //     loadMap(location,mapElement);
+  //   });
+  // });
+  const addEventlisterForMap = function() {
+    $('.findPlaces').on('submit', function(event) {
+      const id = $(this).children('.mapid').text()
+      event.preventDefault();
+      const markup = `
+      <section class='place-viewer mx-auto'>
+      <div class='card-group'>
+      </div>
+      </section>
+      <div class='id-for-add-place'>${id}</div>
+      <button class='close-display-layer btn mx-auto'>Exit</button>
+      `;
+      const element = $('<div>').addClass('display-places-options');
+      element.html(markup);
+      element.appendTo('body');
+      getPlaces($('.textQuery').val(),displayPlaces);
+      $('.close-display-layer').on('click' ,() => {
+        $('.display-places-options').remove();
+      });
     });
-  });
-
-  $('.findPlaces').on('submit', (event) => {
-    event.preventDefault();
-    const markup = `
-    <section class='place-viewer mx-auto'>
-    <div class='card-group'>
-    </div>
-    </section>
-    <button class='close-display-layer btn mx-auto'>Exit</button>
-    `;
-    const element = $('<div>').addClass('display-places-options');
-    element.html(markup);
-    element.appendTo('body');
-    getPlaces($('.textQuery').val(),displayPlaces);
-    $('.close-display-layer').on('click' ,() => {
-      $('.display-places-options').remove();
-    });
-
-  });
+  }
   
+
+
+
   const getPlacesFromSql = function (map, callback) {
     $.ajax({
       method: "POST",
@@ -210,7 +215,6 @@ $(() => {
     </div>
       </div>
         <div class='edit d-flex flex-row-reverse'>
-            <div class='mapid d-none'>${map.id}</div>
             <button class="btn btn-primary mr-3 mt-2" type="button" data-toggle="collapse" data-target="#searchForm" aria-expanded="false" aria-controls="searchForm">
                 Edit
             </button>
@@ -218,6 +222,7 @@ $(() => {
           <div class="collapse" id="searchForm">
             <div class='row'>
               <form class='col-5 findPlaces'>
+                  <div class='mapid d-none'>${map.id}</div>
                   <div class="form-group">
                     <p>Find Places</p>
                     <input type="text" class="form-control textQuery" name='textQuery' placeholder="Enter places">
@@ -258,16 +263,15 @@ $(() => {
 
 
           //add event listen
-          
+          addEventlisterForMap()
 
         })
       }
       
     })
   }
-  renderMapsections()
+  renderMapsections();
 
- })
 
   $('.addMap').on('submit', (event)=>{
     event.preventDefault();
