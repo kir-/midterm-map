@@ -43,7 +43,7 @@ html, body {
 
 .place-viewer {
   width: 80%;
-  height: 50%;
+  height: 62%;
   margin-top: 10%;
   overflow-x:scroll;
 }
@@ -52,6 +52,26 @@ html, body {
   z-index: 1;
   position: relative;
 }
+
+.add-place {
+  position: absolute;
+  bottom: 3px;
+  right: 5px;
+}
+
+.card {
+  width: 18rem;
+  min-width: 18rem !important;
+  max-width: 18rem !important;
+  min-height: 31rem !important;
+  max-height: 31rem !important;
+}
+
+.card-img-top{
+  object-fit: cover center;
+  height: 205px;
+}
+
 
 nav {
   background-color: rgba(0, 0, 0, 0.8)
@@ -62,8 +82,6 @@ main {
   width: 95%;
   height: 100%;
 }
-
-
 
 .map-row {
   width: 100%;

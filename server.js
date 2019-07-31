@@ -7,6 +7,7 @@ const ENV        = process.env.ENV || "development";
 const express    = require("express");
 const bodyParser = require("body-parser");
 const sass       = require("node-sass-middleware");
+const request = require('request');
 const app        = express();
 const morgan     = require('morgan');
 const key        = process.env.key;
@@ -47,6 +48,19 @@ app.use("/api/widgets", widgetsRoutes(db));
 // Home page
 // Warning: avoid creating more routes in this file!
 // Separate them into separate routes files (see above).
+app.post("/markup", (req,res)=>{
+  request.post(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${req.body.query}&key=AIzaSyCS2HA8sY280xwjwAZbVRoA5hIzfDg41xM`, function(error,response,body) {
+    res.send(body);
+  });
+
+});
+
+app.post("/loadimage", (req,res)=>{
+  request.post(`https://maps.googleapis.com/maps/api/place/photo?maxwidth=200&photoreference=${req.body.photoID}&key=AIzaSyCS2HA8sY280xwjwAZbVRoA5hIzfDg41xM`, function(error,response,body) {
+    res.send(response.caseless.dict.location);
+  });
+});
+
 app.get("/", (req, res) => {
   res.render("index");
 });
