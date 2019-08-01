@@ -1,14 +1,25 @@
 $(() => {
-  const loadMap = function(location, element) {
+  const loadMap = function(location, element, places) {
+    console.log('im loading map ' + element)
+    console.log(element)
+
     let newMap = new google.maps.Map(element, {
       center: location,
       zoom: 16
     });
-    new google.maps.Marker({
-      position: location,
-      map: newMap,
-      title: 'Hello World!'
-    });
+    console.log('im here ' + element)
+    for (let place of places) {
+      const loc = {lat: parseFloat(place.latitude), lng: parseFloat(place.longitude)}
+      console.log(loc)
+      console.log(newMap)
+      new google.maps.Marker({
+        position: loc,
+        map: newMap,
+        title: place.name
+      });
+    }
+
+
   };
 
   const createMap = function(query, name, userID) {
@@ -312,10 +323,10 @@ $(() => {
     let html = `
       <p class='map-name'>map name: ${map.name}</p>
       <div class="row map-row">
-          <div class="map col-6">
+          <div class="map col-5">
           <div class='d-none mapid' data-value='${map.id}'>${map.id}</div>
           </div>
-          <div class='col-6 marked-places'>
+          <div class='col-7 marked-places'>
     `;
 
     for (let place of places) {
@@ -372,6 +383,7 @@ $(() => {
   };
 
   const renderMapsections = function() {
+    $('.map-container').empty()
     getmapsFromSql((maps) => {
 
       for (let map of maps) {
@@ -379,15 +391,30 @@ $(() => {
 
           // create html content
           const htmlElement = createHtml(map,places);
+
+          // const location = {lat: parseFloat(map.latitude), lng: parseFloat(map.longitude)}
+
+          // console.log(map.id)
+          // console.log(typeof map.id)
+          
+          
+          // console.log('mapElement')
+          // console.log(mapElement)
+          // loadMap(location, mapElement, places)
+          
+          
           // create element and add class
           const mapSection = $('<section>').addClass('map-element');
           // add html to section
-
+          
           mapSection.html(htmlElement);
           // appened to target 
           $('<div>').addClass('map-container').html(mapSection).appendTo('.main-section');
-
+          
           // call showmap directly
+          const mapElement = $(`div[data-value='${map.id}']`).parent()[0]
+          const location = {lat: parseFloat(map.latitude), lng: parseFloat(map.longitude)}
+          loadMap(location, mapElement, places)
 
 
           //add event listen

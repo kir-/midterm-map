@@ -5,7 +5,7 @@ html, body {
 }
 
 .map {
-  height: 100%;
+  height: 450px;
 }
 
 .map-row {
@@ -15,8 +15,8 @@ html, body {
 
 .marked-places {
   overflow-y:scroll;
-  min-height: 300px;
-  max-height: 300px;
+  min-height: 450px;
+  max-height: 450px;
 }
 
 .display-places-options {
