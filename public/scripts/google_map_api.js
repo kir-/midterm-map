@@ -190,6 +190,10 @@ $(() => {
     $(`.delete-places-${placeId}`).on('click', function() {
       const placeName = $(this).parent().children('.place-name').text();
       const mapId = $(this).parent().children('.mapid').text();
+      console.log('here is mapid ' + mapId)
+      console.log('here is placeName ' + placeName)
+
+
       authentication(mapId, () => {
         $.ajax({
           method: "POST",
