@@ -110,8 +110,8 @@ app.get('/maps', (req,res) => {
 })
 
 
-app.get('/delete/:placeName', function(req, res) {
-  const placeName = req.params.placeName;
+app.post('/delete', function(req, res) {
+  const placeName = req.body.placeName;
   db.query(`
   DELETE FROM places 
   WHERE places.name = $1;

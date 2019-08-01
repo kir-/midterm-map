@@ -143,16 +143,16 @@ $(() => {
 
   const deletePlaces = function() {
     $('.delete-places').on('click', function() {
-      console.log($(this).parent().children('.place-name').text());
-
       const placeName = $(this).parent().children('.place-name').text();
       $.ajax({
-        method: "get",
-        url: `/delete/${placeName}`,
+        method: "POST",
+        url: `/delete`,
+        data: {
+          placeName
+        }
       }).done(() => {
-        $(this).parent().parent().remove()
       })
-
+      $(this).parent().parent().remove()
     })
     }   
 
