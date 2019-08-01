@@ -155,8 +155,32 @@ $(() => {
       const element = $('<div>').addClass('display-places-options');
       element.html(markup);
       element.appendTo('body');
+
       getPlaces($('.textQuery').val(),displayPlaces);
-      $('.close-display-layer').on('click' ,() => {
+
+      $('.close-display-layer').on('click' , function (event) {
+        const mapId = $(this).parent().children('.id-for-add-place').text()
+        const mapObj = {
+          id: mapId
+        }
+        
+        getPlacesFromSql(mapObj, (map,places) => {
+          const placeTORender = $(`div[data-value="${mapId}"]`).parent().parent().children('.marked-places')
+          placeTORender.html('')
+          for (let place of places) {
+            const placeElement = $('<section>').addClass('row').addClass('marked-place')
+            placeElement.html(`
+            <div class='place-imgs col-3'></div>
+            <div class='place-details col-9'>
+              <p>${place.name}</p>
+              <p>rating: ${place.rating}</p>
+              <p>address: ${place.address}</p>
+            </div>
+            `)
+            placeTORender.append(placeElement);
+          }
+        })
+
         $('.display-places-options').remove();
       });
     });
@@ -183,9 +207,6 @@ $(() => {
       url: "/maps",
     }).done((maps) => {
       callback(maps)
-
-      // const htmlElement = 
-      // const mapSection = $('<section>').addClass('map-element')
     })
   }
 
@@ -194,7 +215,7 @@ $(() => {
       <p class='map-name'>map name: ${map.name}</p>
       <div class="row map-row">
           <div class="map col-6">
-          <div class='d-none'>${map.id}</div>
+          <div class='d-none mapid' data-value='${map.id}'>${map.id}</div>
           </div>
           <div class='col-6 marked-places'>
     `;
@@ -215,11 +236,11 @@ $(() => {
     </div>
       </div>
         <div class='edit d-flex flex-row-reverse'>
-            <button class="btn btn-primary mr-3 mt-2" type="button" data-toggle="collapse" data-target="#searchForm" aria-expanded="false" aria-controls="searchForm">
+            <button class="btn btn-primary mr-3 mt-2" type="button" data-toggle="collapse" data-target="#searchForm${map.id}" aria-expanded="false" aria-controls="searchForm">
                 Edit
             </button>
         </div>
-          <div class="collapse" id="searchForm">
+          <div class="collapse" id="searchForm${map.id}">
             <div class='row'>
               <form class='col-5 findPlaces'>
                   <div class='mapid d-none'>${map.id}</div>
@@ -232,7 +253,6 @@ $(() => {
             </div>
         </div>
     `
-    console.log(html)
     return html;
 
 
@@ -244,9 +264,6 @@ $(() => {
 
       for (let map of maps) {
         getPlacesFromSql(map, (map, places) => {
-          console.log('check this out!!!')
-          console.log(map)
-          console.log(places)
 
           
           // create html content
@@ -255,9 +272,9 @@ $(() => {
           const mapSection = $('<section>').addClass('map-element');
           // add html to section
           mapSection.html(htmlElement)
+          $('<div>').html(mapSection)
           // appened to target 
-          mapSection.appendTo('.main-section')
-          $('<br>').appendTo('.main-section')
+          $('<div>').html(mapSection).appendTo('.main-section')
 
           // call showmap directly
 
