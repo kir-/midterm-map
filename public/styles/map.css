@@ -15,7 +15,8 @@ html, body {
 
 .marked-places {
   overflow-y:scroll;
-  min-height: 300px
+  min-height: 300px;
+  max-height: 300px;
 }
 
 .display-places-options {
@@ -100,4 +101,8 @@ main {
   left:50%;
   transform:translateY(-50%) translateX(-50%);
   min-height: 120px;
+}
+
+.map-container {
+  margin-bottom: 30px;
 }
