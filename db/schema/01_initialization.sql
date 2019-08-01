@@ -22,9 +22,11 @@ CREATE TABLE maps (
 
 CREATE TABLE places (
   id SERIAL PRIMARY KEY NOT NULL,
+
   latitude VARCHAR(255),
   longitude VARCHAR(255),
   rating VARCHAR(255),
+
   name VARCHAR(255),
   type VARCHAR(1000),
   image VARCHAR(1000),

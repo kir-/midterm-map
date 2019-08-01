@@ -18,7 +18,7 @@
 
 
 
-<div>
+<div class='map-container'>
   <section class='map-element'>
     <p class='map-name'>map name: ${map.name}</p>
     <div class="row map-row">
@@ -26,11 +26,12 @@
         </div>
         <div class='col-6 marked-places'>
           <section class='row marked-place'>
-            <div class='place-imgs col-3'></div>
+            <div class='place-imgs col-3'><img class='map-img' src="/images/example.jpg"></div>
             <div class='place-details col-9'>
-              <p>${place.name}</p>
-              <p>rating: ${place.rating}</p>
-              <p>address: ${place.address}</p>
+              <button type="button" class="btn btn-danger float-right delete-places"><i class="fas fa-times"></i></button>
+              <p  class='place-name'>${place.name}</p>
+              <p  class='place-rating'>rating: ${place.rating}</p>
+              <p class='place-address'>address: ${place.address}</p>
             </div>
           </section>
         </div>
