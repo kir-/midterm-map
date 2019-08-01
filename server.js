@@ -62,13 +62,19 @@ app.post("/loadimage", (req,res)=>{
 
 app.post("/addmap", (req,res)=>{
   db.query(`INSERT INTO maps (name, longitude, latitude) VALUES ($1, $2, $3) RETURNING id`,[req.body.name, req.body.longitude, req.body.latitude]).then((mapID)=>{
-    db.query(`INSERT INTO permission (user_id, map_id, edit) VALUES ($1, $2, true)`, [req.body.user, mapID.rows[0].id]);
+    db.query(`INSERT INTO permission (member_id, map_id, edit) VALUES ($1, $2, true)`, [req.body.user, mapID.rows[0].id]);
   });
 });
 
 app.post("/addplace",(req,res)=>{
   db.query(`INSERT INTO places (latitude, longitude, rating, name, type, image, address) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`,[req.body.latitude, req.body.longitude, req.body.rating, req.body.name, req.body.type, req.body.image, req.body.address]).then((placeID) => {
     db.query(`INSERT INTO place_on_map (map_id, place_id) VALUES ($1, $2)`,[req.body.mapID, placeID.rows[0].id]);
+  });
+});
+
+app.post("/userid",(req,res) => {
+  db.query(`SELECT id FROM users WHERE name = $1`,[req.body.username]).then((userID)=>{
+    res.send(String(userID.rows[0].id));
   });
 });
 
@@ -116,7 +122,7 @@ app.get('/maps', (req,res) => {
 app.post('/delete', function(req, res) {
   const placeName = req.body.placeName;
   db.query(`
-  DELETE FROM places 
+  DELETE FROM places
   WHERE places.name = $1;
   `, [placeName]).then((response) => {
   })

@@ -11,28 +11,38 @@ $(() => {
     });
   };
 
-  const createMap = function(query, name, userID) {
-    const queryParsed = query.split(' ').join('+');
+  const createMap = function(location, name, username) {
+    const locationParsed = location.split(' ').join('+');
     $.ajax({
       method: 'POST',
       url: "/markup",
       data: {
-        "query" : queryParsed
+        "query" : locationParsed
       }
-    }).done((location)=>{
-      const keys = Object.keys(location);
-      if (keys) {
-        $.ajax({
-          method: 'POST',
-          url: '/addmap',
-          data: {
-            user: userID,
-            name: name,
-            longitude: location.keys[0].geometry.location.lng,
-            latitude: location.keys[0].geometry.location.lat
-          }
-        });
-      }
+    }).done((locationString)=>{
+      $.ajax({
+        method: 'POST',
+        url: '/userid',
+        data: {
+          username
+        }
+      }).done((userid)=>{
+        const locationObj = JSON.parse(locationString).results;
+        if (locationObj) {
+          $.ajax({
+            method: 'POST',
+            url: '/addmap',
+            data: {
+              user: userid,
+              name: name,
+              longitude: locationObj[0].geometry.location.lng,
+              latitude: locationObj[0].geometry.location.lat
+            }
+          });
+        }
+      }).done(()=>{
+        renderMapsections();
+      });
     });
   };
 
@@ -70,7 +80,6 @@ $(() => {
           };
         }
       });
-      console.log(placeObj);
       callback(placeObj);
     });
   };
@@ -107,7 +116,6 @@ $(() => {
         element.appendTo('.card-group');
 
         $(`#${placeObj[place].placeId}`).on('click',function() {
-          // console.log($(this));
           const name = $(this).parent().parent().parent().children('.card-body').children('.card-title').text();
           const image = $(this).parent().parent().parent().children('.card-img-top').attr('src');
           const type = $(this).parent().parent().parent().children('.card-body').children('.badge-info').text();
@@ -116,7 +124,6 @@ $(() => {
           const longitude = $(this).parent().parent().parent().children('.card-body').children('.long').text();
           const latitude = $(this).parent().parent().parent().children('.card-body').children('.lat').text();
           const mapID = $(this).parent().parent().parent().parent().parent().parent().children('.id-for-add-place').text();
-          console.log(`name: ${name}\nimage: ${image}\ntypee: ${type}\nrating: ${rating}\naddress: ${address}\nlongitude: ${longitude}\nlatitude: ${latitude}`);
           $.ajax({
             method: 'POST',
             url: "/addplace",
@@ -167,11 +174,10 @@ $(() => {
           placeName
         }
       }).done(() => {
-      })
-      $(this).parent().parent().remove()
-    })
-    }   
-
+      });
+      $(this).parent().parent().remove();
+    });
+  };
 
   const addEventlisterForMap = function() {
     $('.findPlaces').on('submit', function(event) {
@@ -200,7 +206,6 @@ $(() => {
           const placeTORender = $(`div[data-value="${mapId}"]`).parent().parent().children('.marked-places')
           placeTORender.html('');
           for (let place of places) {
-            console.log("currently working on => ", place);
             const placeElement = $('<section>').addClass('row').addClass('marked-place')
             placeElement.html(`
             <div class='place-imgs col-3'><img class='map-img' src=${place.image}></div>
@@ -222,7 +227,7 @@ $(() => {
       });
     });
 
-    deletePlaces()
+    deletePlaces();
   };
 
   const getPlacesFromSql = function(map, callback) {
@@ -257,7 +262,6 @@ $(() => {
     `;
 
     for (let place of places) {
-      console.log(place.image)
       html += `
       <section class='row marked-place'>
       <div class='place-imgs col-3'><img class='map-img' src=${place.image}></div>
@@ -295,11 +299,10 @@ $(() => {
   };
 
   const renderMapsections = function() {
+    $('.map-container').empty();
     getmapsFromSql((maps) => {
-
       for (let map of maps) {
         getPlacesFromSql(map, (map, places) => {
-
           // create html content
           const htmlElement = createHtml(map,places);
           // create element and add class
@@ -307,7 +310,7 @@ $(() => {
           // add html to section
 
           mapSection.html(htmlElement);
-          // appened to target 
+          // appened to target
           $('<div>').addClass('map-container').html(mapSection).appendTo('.main-section');
 
           // call showmap directly
@@ -320,5 +323,16 @@ $(() => {
 
     });
   };
+
+  $('.map-id-submit').on('submit', (event) => {
+    event.preventDefault();
+    const mapName = $('#id-input').val();
+    const mapLocation = $('#location-input').val();
+    const username = $('.display-username').text();
+    if (username) {
+      createMap(mapLocation, mapName, username);
+    }
+  });
+
   renderMapsections();
 });
