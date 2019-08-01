@@ -20,12 +20,13 @@ CREATE TABLE maps (
   latitude VARCHAR(255) NOT NULL
 );
 
-
 CREATE TABLE places (
   id SERIAL PRIMARY KEY NOT NULL,
-  latitude INTEGER,
-  longitude INTEGER,
-  rating INTEGER,
+
+  latitude VARCHAR(255),
+  longitude VARCHAR(255),
+  rating VARCHAR(255),
+
   name VARCHAR(255),
   type VARCHAR(1000),
   image VARCHAR(1000),
