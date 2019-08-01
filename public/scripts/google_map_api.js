@@ -292,7 +292,7 @@ $(() => {
 
   const addEventlisterForMap = function(mapId) {
 
-    authentication(mapId,findPlaces);
+    // authentication(mapId,findPlaces);
     findPlaces()
     addMembers();
     deletePlaces();
