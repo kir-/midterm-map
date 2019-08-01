@@ -140,6 +140,23 @@ $(() => {
   //     loadMap(location,mapElement);
   //   });
   // });
+
+  const deletePlaces = function() {
+    $('.delete-places').on('click', function() {
+      console.log($(this).parent().children('.place-name').text());
+
+      const placeName = $(this).parent().children('.place-name').text();
+      $.ajax({
+        method: "get",
+        url: `/delete/${placeName}`,
+      }).done(() => {
+        $(this).parent().parent().remove()
+      })
+
+    })
+    }   
+
+
   const addEventlisterForMap = function() {
     $('.findPlaces').on('submit', function(event) {
       const id = $(this).children('.mapid').text()
@@ -149,7 +166,7 @@ $(() => {
       <div class='card-group'>
       </div>
       </section>
-      <div class='id-for-add-place'>${id}</div>
+      <div class='id-for-add-place d-none'>${id}</div>
       <button class='close-display-layer btn mx-auto'>Exit</button>
       `;
       const element = $('<div>').addClass('display-places-options');
@@ -168,22 +185,28 @@ $(() => {
           const placeTORender = $(`div[data-value="${mapId}"]`).parent().parent().children('.marked-places')
           placeTORender.html('')
           for (let place of places) {
+            console.log("currently working on => ", place);
             const placeElement = $('<section>').addClass('row').addClass('marked-place')
             placeElement.html(`
-            <div class='place-imgs col-3'></div>
+            <div class='place-imgs col-3'><img class='map-img' src=${place.image}></div>
             <div class='place-details col-9'>
-              <p>${place.name}</p>
-              <p>rating: ${place.rating}</p>
-              <p>address: ${place.address}</p>
+              <button type="button" class="btn btn-danger float-right delete-places"><i class="fas fa-times"></i></button>
+              <p class='place-name'>${place.name}</p>
+              <p class='place-rating'>rating: ${place.rating}</p>
+              <p class='place-address'>address: ${place.address}</p>
             </div>
             `)
             placeTORender.append(placeElement);
           }
+          deletePlaces()
+
         })
+
 
         $('.display-places-options').remove();
       });
     });
+    deletePlaces()
   }
   
 
@@ -219,15 +242,16 @@ $(() => {
           </div>
           <div class='col-6 marked-places'>
     `;
-    
     for (let place of places) {
+      console.log(place.image)
       html += `
       <section class='row marked-place'>
-      <div class='place-imgs col-3'></div>
+      <div class='place-imgs col-3'><img class='map-img' src=${place.image}></div>
       <div class='place-details col-9'>
-        <p>${place.name}</p>
-        <p>rating: ${place.rating}</p>
-        <p>address: ${place.address}</p>
+        <button type="button" class="btn btn-danger float-right delete-places"><i class="fas fa-times"></i></button>
+        <p class='place-name'>${place.name}</p>
+        <p class='place-rating'>rating: ${place.rating}</p>
+        <p class='place-address'>address: ${place.address}</p>
       </div>
     </section>
       `
@@ -275,7 +299,6 @@ $(() => {
           $('<div>').html(mapSection)
           // appened to target 
           $('<div>').html(mapSection).appendTo('.main-section')
-
           // call showmap directly
 
 

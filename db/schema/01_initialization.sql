@@ -16,15 +16,15 @@ CREATE TABLE users (
 CREATE TABLE maps (
   id SERIAL PRIMARY KEY NOT NULL,
   name VARCHAR(255) NOT NULL,
-  longtitude VARCHAR(255) NOT NULL,
-  lantitude VARCHAR(255) NOT NULL
+  longitude VARCHAR(255) NOT NULL,
+  latitude VARCHAR(255) NOT NULL
 );
 
 
 CREATE TABLE places (
   id SERIAL PRIMARY KEY NOT NULL,
-  lantitude INTEGER,
-  longtitude INTEGER,
+  latitude INTEGER,
+  longitude INTEGER,
   rating INTEGER,
   name VARCHAR(255),
   type VARCHAR(1000),
