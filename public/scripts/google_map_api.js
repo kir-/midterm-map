@@ -95,7 +95,7 @@ $(() => {
             </ul>
             </br>
             <div class='d-flex justify-content-end'>
-            <button class='btn btn-outline-success mt-2 add-place'>add place</button>
+            <button class='btn btn-outline-success mt-2' id=${placeObj[place].placeId}>add place</button>
             </div>
             <p class='d-none long'>${placeObj[place].long}</p>
             <p class='d-none lat'>${placeObj[place].lat}</p>
@@ -106,7 +106,8 @@ $(() => {
         element.html(markup);
         element.appendTo('.card-group');
 
-        $(".add-place").on('click',function() {
+        $(`#${placeObj[place].placeId}`).on('click',function() {
+          // console.log($(this));
           const name = $(this).parent().parent().parent().children('.card-body').children('.card-title').text();
           const image = $(this).parent().parent().parent().children('.card-img-top').attr('src');
           const type = $(this).parent().parent().parent().children('.card-body').children('.badge-info').text();
@@ -114,8 +115,8 @@ $(() => {
           const address = $(this).parent().parent().parent().children('.card-body').children('ul').children('.address').text();
           const longitude = $(this).parent().parent().parent().children('.card-body').children('.long').text();
           const latitude = $(this).parent().parent().parent().children('.card-body').children('.lat').text();
-          const mapID = $(this).parent().parent().parent().children('.id-for-add-place').text();
-          // console.log(`name: ${name}\nimage: ${image}\ntypee: ${type}\nrating: ${rating}\naddress: ${address}\nlongitude: ${longitude}\nlatitude: ${latitude}\nplace id: ${place_id}`);
+          const mapID = $(this).parent().parent().parent().parent().parent().parent().children('.id-for-add-place').text();
+          console.log(`name: ${name}\nimage: ${image}\ntypee: ${type}\nrating: ${rating}\naddress: ${address}\nlongitude: ${longitude}\nlatitude: ${latitude}`);
           $.ajax({
             method: 'POST',
             url: "/addplace",
@@ -176,11 +177,11 @@ $(() => {
         const mapId = $(this).parent().children('.id-for-add-place').text();
         const mapObj = {
           id: mapId
-        }
+        };
 
         getPlacesFromSql(mapObj, (map,places) => {
           const placeTORender = $(`div[data-value="${mapId}"]`).parent().parent().children('.marked-places')
-          placeTORender.html('')
+          placeTORender.html('');
           for (let place of places) {
             const placeElement = $('<section>').addClass('row').addClass('marked-place')
             placeElement.html(`
@@ -190,10 +191,10 @@ $(() => {
               <p>rating: ${place.rating}</p>
               <p>address: ${place.address}</p>
             </div>
-            `)
+            `);
             placeTORender.append(placeElement);
           }
-        })
+        });
 
         $('.display-places-options').remove();
       });
@@ -294,9 +295,4 @@ $(() => {
     });
   };
   renderMapsections();
-
-  $('.addMap').on('submit', (event)=>{
-    event.preventDefault();
-
-  });
 });
