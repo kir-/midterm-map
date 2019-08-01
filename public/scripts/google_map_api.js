@@ -95,7 +95,7 @@ $(() => {
             </ul>
             </br>
             <div class='d-flex justify-content-end'>
-            <button class='btn btn-outline-success mt-2' id=${placeObj[place].placeId}>add place</button>
+            <button class='btn btn-outline-success mt-2 add-place' id=${placeObj[place].placeId}>add place</button>
             </div>
             <p class='d-none long'>${placeObj[place].long}</p>
             <p class='d-none lat'>${placeObj[place].lat}</p>
@@ -157,72 +157,134 @@ $(() => {
   //   });
   // });
 
+
+  const authentication = function(mapid,callback) {
+    if($('.display-username').length) {
+      const userName = $('.display-username').text();
+      console.log('for auth ' + userName)
+      $.ajax({
+        method: "POST",
+        url: `/auth`,
+        data: {
+          mapid,
+          userName
+        }
+      }).done((response) => {
+        console.log(response)
+        if (response === 'authorized') {
+          callback()
+        }
+      })
+    } else {
+
+    }
+    
+  }
+
   const deletePlaces = function() {
     $('.delete-places').on('click', function() {
       const placeName = $(this).parent().children('.place-name').text();
-      $.ajax({
-        method: "POST",
-        url: `/delete`,
-        data: {
-          placeName
-        }
-      }).done(() => {
-      })
-      $(this).parent().parent().remove()
-    })
-    }   
+      const mapId = $(this).parent().children('.mapid').text()
 
+      authentication(mapId, () => {
 
-  const addEventlisterForMap = function() {
-    $('.findPlaces').on('submit', function(event) {
-      const id = $(this).children('.mapid').text();
-      event.preventDefault();
-      const markup = `
-      <section class='place-viewer mx-auto'>
-      <div class='card-group'>
-      </div>
-      </section>
-      <div class='id-for-add-place d-none'>${id}</div>
-      <button class='close-display-layer btn mx-auto'>Exit</button>
-      `;
-      const element = $('<div>').addClass('display-places-options');
-      element.html(markup);
-      element.appendTo('body');
-      getPlaces($(this).children('.form-group').children('.textQuery').val(),displayPlaces);
-
-      $('.close-display-layer').on('click' , function (event) {
-        const mapId = $(this).parent().children('.id-for-add-place').text();
-        const mapObj = {
-          id: mapId
-        };
-
-        getPlacesFromSql(mapObj, (map,places) => {
-          const placeTORender = $(`div[data-value="${mapId}"]`).parent().parent().children('.marked-places')
-          placeTORender.html('');
-          for (let place of places) {
-            console.log("currently working on => ", place);
-            const placeElement = $('<section>').addClass('row').addClass('marked-place')
-            placeElement.html(`
-            <div class='place-imgs col-3'><img class='map-img' src=${place.image}></div>
-            <div class='place-details col-9'>
-              <button type="button" class="btn btn-danger float-right delete-places"><i class="fas fa-times"></i></button>
-              <p class='place-name'>${place.name}</p>
-              <p class='place-rating'>rating: ${place.rating}</p>
-              <p class='place-address'>address: ${place.address}</p>
-            </div>
-            `);
-            placeTORender.append(placeElement);
+        $.ajax({
+          method: "POST",
+          url: `/delete`,
+          data: {
+            placeName
           }
-          deletePlaces()
-        });
+        }).done(() => {
+        })
+        $(this).parent().parent().remove()
+
+      })
+    })
+  } 
+
+ 
+  const addMembers = function() {
+    $('.add-member-form').on('submit', function(event) {
+      event.preventDefault();
+      const mapId = $(this).parent().parent().children('.mapid').text();
+      const memberName = $(this).children('div').children('input').val();
+      
+      authentication(mapId, () => {
+        $.ajax({
+          method: "POST",
+          url: `/members/add`,
+          data: {
+            mapId,
+            memberName
+          }
+        }).done(() => {
+        })
+      })
 
 
+    })
+  }
 
-        $('.display-places-options').remove();
-      });
+  // event listener most be added first and then to check autho
+  const findPlaces = function() {
+    $('.findPlaces').on('submit', function(event) {
+      event.preventDefault();
+      const triggeredElement = $(this);
+      const id = $(this).children('.mapid').text();
+
+      authentication(id, () => {
+              const markup = `
+              <section class='place-viewer mx-auto'>
+              <div class='card-group'>
+              </div>
+              </section>
+              <div class='id-for-add-place d-none'>${id}</div>
+              <button class='close-display-layer btn mx-auto'>Exit</button>
+              `;
+              const element = $('<div>').addClass('display-places-options');
+              element.html(markup);
+              element.appendTo('body');
+              getPlaces(triggeredElement.children('.form-group').children('.textQuery').val(),displayPlaces);
+        
+              $('.close-display-layer').on('click' , function (event) {
+                const mapId = triggeredElement.parent().children('.id-for-add-place').text();
+                const mapObj = {
+                  id: mapId
+                };
+        
+                getPlacesFromSql(mapObj, (map,places) => {
+                  const placeTORender = $(`div[data-value="${mapId}"]`).parent().parent().children('.marked-places')
+                  placeTORender.html('');
+                  for (let place of places) {
+                    console.log("currently working on => ", place);
+                    const placeElement = $('<section>').addClass('row').addClass('marked-place')
+                    placeElement.html(`
+                    <div class='place-imgs col-3'><img class='map-img' src=${place.image}></div>
+                    <div class='place-details col-9'>
+                      <button type="button" class="btn btn-danger float-right delete-places"><i class="fas fa-times"></i></button>
+                      <p class='place-name'>${place.name}</p>
+                      <p class='place-rating'>rating: ${place.rating}</p>
+                      <p class='place-address'>address: ${place.address}</p>
+                    </div>
+                    `);
+                    placeTORender.append(placeElement);
+                  }
+                  deletePlaces()
+                });
+        
+                $('.display-places-options').remove();
+              });
+      })
     });
+  }
 
-    deletePlaces()
+
+  const addEventlisterForMap = function(mapId) {
+
+    authentication(mapId,findPlaces);
+    findPlaces()
+    addMembers();
+    deletePlaces();
   };
 
   const getPlacesFromSql = function(map, callback) {
@@ -262,6 +324,7 @@ $(() => {
       <section class='row marked-place'>
       <div class='place-imgs col-3'><img class='map-img' src=${place.image}></div>
       <div class='place-details col-9'>
+        <div class='mapid d-none'>${map.id}</div>
         <button type="button" class="btn btn-danger float-right delete-places"><i class="fas fa-times"></i></button>
         <p class='place-name'>${place.name}</p>
         <p class='place-rating'>rating: ${place.rating}</p>
@@ -274,11 +337,14 @@ $(() => {
     </div>
       </div>
         <div class='edit d-flex flex-row-reverse'>
-            <button class="btn btn-primary mr-3 mt-2" type="button" data-toggle="collapse" data-target="#searchForm${map.id}" aria-expanded="false" aria-controls="searchForm">
-                Edit
+            <button class="btn btn-info mr-3 mt-2" type="button" data-toggle="collapse" data-target="#searchForm${map.id}" aria-expanded="false" aria-controls="searchForm">
+              Edit
+            </button>
+            <button class="btn btn-info mr-3 mt-2" type="button" data-toggle="collapse" data-target="#add-member-${map.id}" aria-expanded="false" aria-controls="add-member">
+              <span> <i class="fas fa-plus"></i> Member</span>
             </button>
         </div>
-          <div class="collapse" id="searchForm${map.id}">
+          <div class="collapse mb-2" id="searchForm${map.id}">
             <div class='row'>
               <form class='col-5 findPlaces'>
                   <div class='mapid d-none'>${map.id}</div>
@@ -286,10 +352,21 @@ $(() => {
                     <p>Find Places</p>
                     <input type="text" class="form-control textQuery" name='textQuery' placeholder="Enter places">
                   </div>
-                  <button type="submit" class="btn btn-primary">Submit</button>
+                  <button type="submit" class="btn btn-info">Submit</button>
               </form>
             </div>
         </div>
+        <div class="collapse" id="add-member-${map.id}">
+        <div class='mapid d-none'>${map.id}</div>
+        <div class='row'>
+          <form class="col-5 add-member-form  form-inline">
+            <div class="form-group mx-sm-3 mb-2">
+              <input type="text" class="form-control" placeholder="Enter Member Name">
+            </div>
+            <button type="submit" class="btn btn-info mb-2">Add Member</button>
+          </form>
+        </div>
+      </div>
     `;
     return html;
   };
@@ -314,11 +391,12 @@ $(() => {
 
 
           //add event listen
-          addEventlisterForMap();
+          addEventlisterForMap(map.id);
         });
       }
 
     });
   };
+
   renderMapsections();
 });
