@@ -39,22 +39,37 @@
     </div>
       <div class='edit d-flex flex-row-reverse'>
           <div class='mapid d-none'>${map.id}</div>
-          <button class="btn btn-primary mr-3 mt-2" type="button" data-toggle="collapse" data-target="#searchForm" aria-expanded="false" aria-controls="searchForm">
+          <button class="btn btn-info mr-3 mt-2" type="button" data-toggle="collapse" data-target="#searchForm" aria-expanded="false" aria-controls="searchForm">
               Edit
           </button>
+          <button class="btn btn-info mr-3 mt-2" type="button" data-toggle="collapse" data-target="#add-member" aria-expanded="false" aria-controls="add-member">
+            <span> <i class="fas fa-plus"></i> Member</span>
+        </button>
       </div>
-        <div class="collapse" id="searchForm">
+        <div class="collapse mb-2" id="searchForm">
           <div class='row'>
             <form class='col-5 findPlaces'>
                 <div class="form-group">
                   <p>Find Places</p>
                   <input type="text" class="form-control textQuery" name='textQuery' placeholder="Enter places">
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-info">Submit</button>
             </form>
           </div>
-      </div>
-  </section> -->
+        </div>
+
+        <div class="collapse" id="add-member">
+          <div class='row'>
+            <form class="col-5 add-member-form  form-inline">
+              <div class="form-group mx-sm-3 mb-2">
+                <input type="text" class="form-control" placeholder="Enter Member Name">
+              </div>
+              <button type="submit" class="btn btn-info mb-2 add-member-submit">Add Member</button>
+            </form>
+          </div>
+        </div>
+
+  </section>
 </div>
 </main>
 

@@ -128,6 +128,50 @@ app.post('/delete', function(req, res) {
   })
 })
 
+app.post('/members/add', function(req, res) {
+  const {mapId, memberName} = req.body;
+  console.log(mapId)
+  console.log(memberName)
+  db.query(`
+    SELECT users.id 
+    FROM users 
+    WHERE users.name = $1
+  ;
+  `,[memberName]).then((response) => {
+    if(response.rows.length) {
+      const userid = response.rows[0].id
+      db.query(`
+      INSERT INTO permission (member_id, map_id, edit) VALUES ($1, $2, true)
+      `, [userid, mapId]).then(()=>{
+      }).catch(error => {});
+    }
+  }).catch(error => {});
+
+})
+
+
+
+
+app.post('/auth', (req, res) => {
+  const {mapid, userName} = req.body;
+  console.log('person to be auth' + userName + mapid)
+  db.query(`
+  SELECT * 
+  FROM users JOIN permission on (users.id = permission.member_id)
+  WHERE permission.map_id = $1 AND users.name = $2;
+  `, [mapid, userName]).then((response) => {
+    if(response.rows.length) {
+      res.send('authorized')
+    } else {
+      res.send('unauthorized')
+    }
+  }).catch(error => {
+    console.log(error)
+  });
+})
+
+
+
 
 
 app.listen(PORT, () => {

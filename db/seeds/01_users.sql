@@ -1,7 +1,7 @@
 
 INSERT INTO users (name, password) VALUES ('grayson', '123' );
 INSERT INTO users (name, password) VALUES ('sean', '123' );
-
+INSERT INTO users (name, password) VALUES ('visitor', '123' );
 
 INSERT INTO maps (name, longitude, latitude) VALUES ('lighthouse','-123.1149943', '49.2812333');
 
