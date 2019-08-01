@@ -113,8 +113,8 @@ $(() => {
           const address = $(this).parent().parent().parent().children('.card-body').children('ul').children('.address').text();
           const longitude = $(this).parent().parent().parent().children('.card-body').children('.long').text();
           const latitude = $(this).parent().parent().parent().children('.card-body').children('.lat').text();
-          const place_id = $(this).parent().parent().parent().children('.card-body').children('.placeid').text();
-          console.log(`name: ${name}\nimage: ${image}\ntypee: ${type}\nrating: ${rating}\naddress: ${address}\nlongitude: ${longitude}\nlatitude: ${latitude}\nplace id: ${place_id}`);
+          const mapID = $(this).parent().parent().parent().children('.id-for-add-place').text();
+          // console.log(`name: ${name}\nimage: ${image}\ntypee: ${type}\nrating: ${rating}\naddress: ${address}\nlongitude: ${longitude}\nlatitude: ${latitude}\nplace id: ${place_id}`);
           $.ajax({
             method: 'POST',
             url: "/addplace",
@@ -126,7 +126,7 @@ $(() => {
               address,
               longitude,
               latitude,
-              place_id
+              mapID
             }
           });
           $(this).text('added');
@@ -145,36 +145,38 @@ $(() => {
   //   });
   // });
 
-  $showmap = $('#showmap');
-  $showmap.on('click', (event) => {
-    const mapElement = $('.map')[0];
-    let myloc;
+  // $showmap = $('#showmap');
+  // $showmap.on('click', (event) => {
+  //   const mapElement = $('.map')[0];
+  //   let myloc;
 
-    getGeolocation((location)=>{
-      loadMap(location,mapElement);
+  //   getGeolocation((location)=>{
+  //     loadMap(location,mapElement);
+  //   });
+  // });
+  const addEventlisterForMap = function() {
+    $('.findPlaces').on('submit', function(event) {
+      const id = $(this).children('.mapid').text();
+      event.preventDefault();
+      const markup = `
+      <section class='place-viewer mx-auto'>
+      <div class='card-group'>
+      </div>
+      </section>
+      <div class='id-for-add-place'>${id}</div>
+      <button class='close-display-layer btn mx-auto'>Exit</button>
+      `;
+      const element = $('<div>').addClass('display-places-options');
+      element.html(markup);
+      element.appendTo('body');
+      getPlaces($('.textQuery').val(),displayPlaces);
+      $('.close-display-layer').on('click' ,() => {
+        $('.display-places-options').remove();
+      });
     });
-  });
+  };
 
-  $('.findPlaces').on('submit', (event) => {
-    event.preventDefault();
-    const markup = `
-    <section class='place-viewer mx-auto'>
-    <div class='card-group'>
-    </div>
-    </section>
-    <button class='close-display-layer btn mx-auto'>Exit</button>
-    `;
-    const element = $('<div>').addClass('display-places-options');
-    element.html(markup);
-    element.appendTo('body');
-    getPlaces($('.textQuery').val(),displayPlaces);
-    $('.close-display-layer').on('click' ,() => {
-      $('.display-places-options').remove();
-    });
-
-  });
-
-  const getPlacesFromSql = function (map, callback) {
+  const getPlacesFromSql = function(map, callback) {
     $.ajax({
       method: "POST",
       url: "/map_info",
@@ -198,7 +200,7 @@ $(() => {
     });
   };
 
-  const createHtml = function (map, places) {
+  const createHtml = function(map, places) {
     let html = `
       <p class='map-name'>map name: ${map.name}</p>
       <div class="row map-row">
@@ -218,13 +220,12 @@ $(() => {
         <p>address: ${place.address}</p>
       </div>
     </section>
-      `
+      `;
     }
     html += `
     </div>
       </div>
         <div class='edit d-flex flex-row-reverse'>
-            <div class='mapid d-none'>${map.id}</div>
             <button class="btn btn-primary mr-3 mt-2" type="button" data-toggle="collapse" data-target="#searchForm" aria-expanded="false" aria-controls="searchForm">
                 Edit
             </button>
@@ -232,6 +233,7 @@ $(() => {
           <div class="collapse" id="searchForm">
             <div class='row'>
               <form class='col-5 findPlaces'>
+                  <div class='mapid d-none'>${map.id}</div>
                   <div class="form-group">
                     <p>Find Places</p>
                     <input type="text" class="form-control textQuery" name='textQuery' placeholder="Enter places">
@@ -269,16 +271,13 @@ $(() => {
 
 
           //add event listen
-
-
+          addEventlisterForMap();
         });
       }
 
     });
   };
   renderMapsections();
-
-
 
   $('.addMap').on('submit', (event)=>{
     event.preventDefault();

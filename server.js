@@ -67,7 +67,9 @@ app.post("/addmap", (req,res)=>{
 });
 
 app.post("/addplace",(req,res)=>{
-  Pool.query(`INSERT INTO places (latitude, longitude, rating, name, type, image, address) VALUES ($1, $2, $3, $4, $5, $6, $7)`[req.body.latitude, req.body.latitude, req.body.rating, req.body.name, req.body.type, req.body.image, req.body.address]);
+  Pool.query(`INSERT INTO places (latitude, longitude, rating, name, type, image, address) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`[req.body.latitude, req.body.latitude, req.body.rating, req.body.name, req.body.type, req.body.image, req.body.address]).then((placeID) => {
+    Pool.query(`INSERT INTO place_on_map (map_id, place_id) VALUES ($1, $2)`,[req.body.mapID, req.body.placeID,]);
+  });
 });
 
 app.get("/", (req, res) => {
