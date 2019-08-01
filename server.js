@@ -62,13 +62,17 @@ app.post("/loadimage", (req,res)=>{
 
 app.post("/addmap", (req,res)=>{
   db.query(`INSERT INTO maps (name, longitude, latitude) VALUES ($1, $2, $3) RETURNING id`,[req.body.name, req.body.longitude, req.body.latitude]).then((mapID)=>{
-    db.query(`INSERT INTO permission (member_id, map_id, edit) VALUES ($1, $2, true)`, [req.body.user, mapID.rows[0].id]);
+    db.query(`INSERT INTO permission (member_id, map_id, edit) VALUES ($1, $2, true)`, [req.body.user, mapID.rows[0].id]).then(()=>{
+      res.send('');
+    });
   });
 });
 
 app.post("/addplace",(req,res)=>{
   db.query(`INSERT INTO places (latitude, longitude, rating, name, type, image, address) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`,[req.body.latitude, req.body.longitude, req.body.rating, req.body.name, req.body.type, req.body.image, req.body.address]).then((placeID) => {
-    db.query(`INSERT INTO place_on_map (map_id, place_id) VALUES ($1, $2)`,[req.body.mapID, placeID.rows[0].id]);
+    db.query(`INSERT INTO place_on_map (map_id, place_id) VALUES ($1, $2)`,[req.body.mapID, placeID.rows[0].id]).then(()=>{
+      res.send('');
+    });
   });
 });
 
@@ -125,29 +129,31 @@ app.post('/delete', function(req, res) {
   DELETE FROM places
   WHERE places.name = $1;
   `, [placeName]).then((response) => {
-  })
-})
+  }).then(()=>{
+    res.send('');
+  });
+});
 
 app.post('/members/add', function(req, res) {
   const {mapId, memberName} = req.body;
   console.log(mapId)
   console.log(memberName)
   db.query(`
-    SELECT users.id 
-    FROM users 
+    SELECT users.id
+    FROM users
     WHERE users.name = $1
   ;
   `,[memberName]).then((response) => {
-    if(response.rows.length) {
-      const userid = response.rows[0].id
+    if (response.rows.length) {
+      const userid = response.rows[0].id;
       db.query(`
       INSERT INTO permission (member_id, map_id, edit) VALUES ($1, $2, true)
       `, [userid, mapId]).then(()=>{
+        res.send('');
       }).catch(error => {});
     }
   }).catch(error => {});
-
-})
+});
 
 
 
@@ -156,7 +162,7 @@ app.post('/auth', (req, res) => {
   const {mapid, userName} = req.body;
   console.log('person to be auth' + userName + mapid)
   db.query(`
-  SELECT * 
+  SELECT *
   FROM users JOIN permission on (users.id = permission.member_id)
   WHERE permission.map_id = $1 AND users.name = $2;
   `, [mapid, userName]).then((response) => {
