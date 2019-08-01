@@ -66,10 +66,15 @@ app.post("/addmap", (req,res)=>{
   });
 });
 
+app.post("/addplace",(req,res)=>{
+  Pool.query(`INSERT INTO places (latitude, longitude, rating, name, type, image, address) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`[req.body.latitude, req.body.latitude, req.body.rating, req.body.name, req.body.type, req.body.image, req.body.address]).then((placeID) => {
+    Pool.query(`INSERT INTO place_on_map (map_id, place_id) VALUES ($1, $2)`,[req.body.mapID, req.body.placeID,]);
+  });
+});
+
 app.get("/", (req, res) => {
   res.render("index");
 });
-
 
 app.post("/login", (req,res) => {
   const username = req.body.username;
@@ -89,26 +94,24 @@ app.post("/login", (req,res) => {
 
 app.post('/map_info', (req,res) => {
   const mapId = req.body.mapId;
-  console.log(mapId)
+  console.log(mapId);
   db.query(`
-  SELECT * 
+  SELECT *
   FROM places JOIN place_on_map on (place_on_map.place_id = places.id)
   WHERE place_on_map.map_id = $1;
   `, [mapId]).then((response) => {
-    res.send(response.rows)
-  })
-})
-
-
+    res.send(response.rows);
+  });
+});
 
 app.get('/maps', (req,res) => {
   db.query(`
   SELECT *
   FROM maps
   `).then((response) => {
-    res.send(response.rows)
-  })
-})
+    res.send(response.rows);
+  });
+});
 
 
 
