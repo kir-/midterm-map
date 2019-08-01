@@ -296,9 +296,8 @@ $(() => {
           const mapSection = $('<section>').addClass('map-element');
           // add html to section
           mapSection.html(htmlElement)
-          $('<div>').html(mapSection)
           // appened to target 
-          $('<div>').html(mapSection).appendTo('.main-section')
+          $('<div>').addClass('map-container').html(mapSection).appendTo('.main-section')
           // call showmap directly
 
 

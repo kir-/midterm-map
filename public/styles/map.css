@@ -13,13 +13,10 @@ html, body {
   height: 100%
 }
 
-.map-element {
-  height :50%;
-}
 
 .marked-places {
-  height: 100%;
   overflow-y:scroll;
+  min-height: 300px
 }
 
 .display-places-options {
