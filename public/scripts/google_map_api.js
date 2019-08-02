@@ -302,7 +302,6 @@ $(() => {
           <a class="dropdown-item" href="#">Contributions</a>
                   <div class="dropdown-divider"></div>
           `)
-          console.log(response) 
           for (let map of response) {
             let mapNameHtml = `
             <a class="dropdown-item" href="#to-map-${map.id}">${map.name}</a>
@@ -326,7 +325,6 @@ $(() => {
         }).done((response) => {
           $("div[aria-labelledby='favorite']").html(`<a class="dropdown-item" href="#">Favorites</a><div class="dropdown-divider"></div>
          `);
-          console.log(response);
           for (let map of response) {
             let mapNameHtml = `
             <a class="dropdown-item" href="#to-map-${map.id}">${map.name}</a>
