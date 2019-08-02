@@ -127,6 +127,7 @@ main {
   /* border-radius: 20px; */
   /* border:10px groove rgba(148, 137, 137, 0.363); */
   box-shadow: 5px 5px 2px 1px rgba(0, 0, 0, .2);
+  border-radius: 20px
 }
 
 

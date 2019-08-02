@@ -184,7 +184,20 @@ app.post('/auth', (req, res) => {
   });
 })
 
+app.get('/contributions/:username', (req, res) => {
+  const username = req.params.username;
+  db.query(`
+  SELECT maps.name, maps.id
+  FROM users JOIN permission ON users.id = permission.member_id
+  JOIN maps ON maps.id = permission.map_id
+  WHERE users.name = $1
+  `, [username]).then((response) => {
+    res.send(response.rows)
+  }).catch(error => {
+  });
 
+
+})
 
 
 
