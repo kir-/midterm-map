@@ -299,7 +299,7 @@ $(() => {
           url: `/contributions/${userName}`,
         }).done( (response) => {
           $("div[aria-labelledby='Contribution']").html(`
-          <a class="dropdown-item" href="#">Contribution TO Maps</a>
+          <a class="dropdown-item" href="#">Contributions</a>
                   <div class="dropdown-divider"></div>
           `)
           console.log(response) 
@@ -311,13 +311,35 @@ $(() => {
             let newHtml = $("div[aria-labelledby='Contribution']").html() + mapNameHtml;
             $("div[aria-labelledby='Contribution']").html(newHtml);
           }
-          
-        })
+        });
       }
+    });
+  };
 
+  const showFavorites = function() {
+    $('#favorite').on('click', () => {
+      if ($('.display-username').length) {
+        const userName = $('.display-username').text();
+        $.ajax({
+          method: "GET",
+          url: `/favorites/${userName}`,
+        }).done((response) => {
+          $("div[aria-labelledby='favorite']").html(`<a class="dropdown-item" href="#">Favorites</a><div class="dropdown-divider"></div>
+         `);
+          console.log(response);
+          for (let map of response) {
+            let mapNameHtml = `
+            <a class="dropdown-item" href="#to-map-${map.id}">${map.name}</a>
+            <div class="dropdown-divider"></div>
+            `
+            let newHtml = $("div[aria-labelledby='favorite']").html() + mapNameHtml;
+            $("div[aria-labelledby='favorite']").html(newHtml);
+          }
 
-    })
-  }
+        });
+      }
+    });
+  };
 
 
   const addEventlisterForMap = function(mapId) {
@@ -446,6 +468,7 @@ $(() => {
       }
 
       showContribution();
+      showFavorites();
     });
   };
 

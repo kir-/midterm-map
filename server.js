@@ -199,12 +199,23 @@ app.get('/contributions/:username', (req, res) => {
   JOIN maps ON maps.id = permission.map_id
   WHERE users.name = $1
   `, [username]).then((response) => {
-    res.send(response.rows)
+    res.send(response.rows);
   }).catch(error => {
   });
+});
 
-
-})
+app.get('/favorites/:username', (req, res) => {
+  const username = req.params.username;
+  db.query(`
+  SELECT DISTINCT maps.name, maps.id
+  FROM users JOIN favorites ON users.id = favorites.user_id
+  JOIN maps ON maps.id = favorites.map_id
+  WHERE users.name = $1
+  `, [username]).then((response) => {
+    res.send(response.rows);
+  }).catch(error => {
+  });
+});
 
 
 
