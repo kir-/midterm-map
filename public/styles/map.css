@@ -2,11 +2,13 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
+
   background-color: rgb(235, 235, 235);
 }
 
 body {
   background-color: rgb(235, 235, 235) !important;
+
 }
 
 main {
@@ -114,12 +116,39 @@ main {
   left:50%;
   transform:translateY(-50%) translateX(-50%);
   min-height: 120px;
+  border-radius: 20px
 }
 
 .map-container {
 
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
+  padding: 15px 10px 15px 40px;
+  margin-bottom: 20px;
+  /* border-radius: 20px; */
+  /* border:10px groove rgba(148, 137, 137, 0.363); */
+  box-shadow: 5px 5px 2px 1px rgba(0, 0, 0, .2);
 }
+
+
+.map-name {
+  font-size:30px;
+  font-weight: bold;
+  font-family: 'Nunito Sans', sans-serif;
+}
+
+.map-seperation {
+  height: 10px;
+  border: 0;
+  box-shadow: 0 10px 10px -10px #8c8b8b inset;
+}
+
+.marked-place {
+  margin-bottom: 10px;
+  box-shadow: 3px 3px 1px 1px rgba(0, 0, 0, .1);
+  border-radius: 20px;
+}
+
+
 
 .stop-scrolling {
   height: 100%;

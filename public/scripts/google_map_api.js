@@ -294,7 +294,7 @@ $(() => {
 
   const createHtml = function(map, places) {
     let html = `
-      <p class='map-name'>map name: ${map.name}</p>
+      <p class='map-name'>${map.name}</p>
       <div class="row map-row">
           <div class="map col-5">
           <div class='d-none mapid' data-value='${map.id}'>${map.id}</div>
@@ -319,7 +319,7 @@ $(() => {
     html += `
     </div>
       </div>
-        <div class='edit d-flex flex-row-reverse'>
+        <div class='edit mt-2 d-flex flex-row-reverse'>
             <button class="btn btn-info mr-3 mt-2" type="button" data-toggle="collapse" data-target="#searchForm${map.id}" aria-expanded="false" aria-controls="searchForm">
               Edit
             </button>
@@ -355,7 +355,7 @@ $(() => {
   };
 
   const renderMapsections = function() {
-    $('.map-container').empty();
+    $('.map-container').remove();
     getmapsFromSql((maps) => {
       for (let map of maps) {
         getPlacesFromSql(map, (map, places) => {
@@ -369,7 +369,7 @@ $(() => {
           mapSection.html(htmlElement);
           // appened to target
           $('<div>').addClass('map-container').html(mapSection).appendTo('.main-section');
-
+          // $('<hr>').addClass('map-seperation').appendTo('.main-section');
           // call showmap directly
           const mapElement = $(`div[data-value='${map.id}']`).parent()[0];
           const location = {lat: parseFloat(map.latitude), lng: parseFloat(map.longitude)};
