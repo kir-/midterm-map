@@ -298,6 +298,10 @@ $(() => {
           method: "GET",
           url: `/contributions/${userName}`,
         }).done( (response) => {
+          $("div[aria-labelledby='Contribution']").html(`
+          <a class="dropdown-item" href="#">Contribution TO Maps</a>
+                  <div class="dropdown-divider"></div>
+          `)
           console.log(response) 
           for (let map of response) {
             let mapNameHtml = `
