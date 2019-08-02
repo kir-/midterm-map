@@ -339,6 +339,45 @@ $(() => {
     });
   };
 
+  const viewPlace = function (id) {
+    $(`.view-places-${id}`).on('click', function() {
+      $.ajax({
+        method: "GET",
+        url: `/view/${id}`,
+      }).done( (location) => {
+        const fenway = {lat: parseFloat(location.latitude), lng: parseFloat(location.longitude)};
+
+        const targetmap = $(this).parent().parent().parent().parent().children('.map')[0]// dom]
+        // const targetmap = $(this).parent().parent().parent().parent()[0]// dom]
+        console.log(targetmap)
+        $(this).parent().parent().parent().parent().children('.map').html('')
+        // $(this).parent().parent().parent().parent().html('')
+
+        // const map = new google.maps.Map(targetmap, {
+        //   center: fenway,
+        //   zoom: 14
+        // });
+        const panorama = new google.maps.StreetViewPanorama(
+            targetmap, {
+              position: fenway,
+              pov: {
+                heading: 34,
+                pitch: 10
+              }
+            });
+        console.log(panorama);
+            
+        map.setStreetView(panorama);
+      });
+    })
+  }
+
+
+  const reloadMap = function (id, location, element, places) {
+    $(`.re-loaded-map-${id}`).on('click', () => {
+      loadMap(location, element, places);
+    })
+  }
 
   const addEventlisterForMap = function(mapId) {
     findPlaces(mapId);
@@ -367,12 +406,15 @@ $(() => {
     });
   };
 
+
   const createHtml = function(map, places) {
     let html = `
       <div id='to-map-${map.id}'></div>
 
-      <p class='map-name'>${map.name}  <button class='btn btn-danger' id=favorite${map.id}><i class="far fa-heart"></i></button></p>
-
+      <p class='map-name'>${map.name}  
+        <button class='btn btn-danger' id=favorite${map.id}><i class="far fa-heart"></i></button>
+        <button class='btn btn-dark re-loaded-map-${map.id}'> <i class="far fa-map"></i></button>
+      </p>
       <div class="row map-row">
           <div class="map col-5">
           <div class='d-none mapid' data-value='${map.id}'>${map.id}</div>
@@ -387,6 +429,7 @@ $(() => {
       <div class='place-details col-9'>
         <div class='mapid d-none'>${map.id}</div>
         <button type="button" class="btn btn-danger float-right delete-places-${place.id}"><i class="fas fa-times"></i></button>
+        <button type="button" class="btn btn-warning mr-2 float-right view-places-${place.id}"><i class="fas fa-road"></i></button>
         <p class='place-name'>${place.name}</p>
         <p class='place-rating'>Rating: ${place.rating}</p>
         <p class='place-address'>Address: ${place.address}</p>
@@ -452,15 +495,17 @@ $(() => {
           const mapElement = $(`div[data-value='${map.id}']`).parent()[0];
           const location = {lat: parseFloat(map.latitude), lng: parseFloat(map.longitude)};
           loadMap(location, mapElement, places);
-
+          reloadMap(map.id,location, mapElement, places)
 
           //add event listen
           for (let place of places) {
             deletePlaces(place.id);
+            viewPlace(place.id)
           }
 
 
           addEventlisterForMap(map.id);
+
           // showContribution();
         });
       }
