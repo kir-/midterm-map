@@ -2,15 +2,15 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  background-color: beige;
+  background-color: rgb(235, 235, 235);
 }
 
 body {
-  background-color: beige !important;
+  background-color: rgb(235, 235, 235) !important;
 }
 
 main {
-  background-color: beige;
+  background-color: rgb(235, 235, 235);
 }
 
 

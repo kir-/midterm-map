@@ -18,7 +18,7 @@ $(() => {
     const locationParsed = location.split(' ').join('+');
     $.ajax({
       method: 'POST',
-      url: "/markup",
+      url: "/getcity",
       data: {
         "query" : locationParsed
       }
@@ -58,13 +58,14 @@ $(() => {
     });
   };
 
-  const getPlaces  = function(options ,callback) {
+  const getPlaces  = function(options, mapid, callback) {
     const urlOption = options.split(' ').join('+');
     $.ajax({
       method: "POST",
       url: "/markup",
       data: {
-        "query" : urlOption
+        "query" : urlOption,
+        "mapid" : mapid
       }
     }).done((placeObject) => {
       let placeList = JSON.parse(placeObject);
@@ -190,9 +191,6 @@ $(() => {
     $(`.delete-places-${placeId}`).on('click', function() {
       const placeName = $(this).parent().children('.place-name').text();
       const mapId = $(this).parent().children('.mapid').text();
-      console.log('here is mapid ' + mapId)
-      console.log('here is placeName ' + placeName)
-
 
       authentication(mapId, () => {
         $.ajax({
@@ -240,8 +238,7 @@ $(() => {
       $(`#searchForm${map_id}`).removeClass('show');
       const triggeredElement = $(this);
       const id = $(this).children('.mapid').text();
-
-      authentication(id, () => {
+      authentication(id, function() {
         const markup = `
         <section class='place-viewer mx-auto'>
         <div class='card-group'>
@@ -253,14 +250,15 @@ $(() => {
        <button class='btn-lg btn-outline-danger ml-2 close-display-layer my-2 my-sm-0'>x</button>
 
         `;
+        const mapid = triggeredElement.children('.mapid').text();
         const element = $('<div>').addClass('display-places-options');
         element.html(markup);
         element.appendTo('body');
-        getPlaces(triggeredElement.children('.form-group').children('.textQuery').val(),displayPlaces);
+        getPlaces(triggeredElement.children('.form-group').children('.textQuery').val(), mapid, displayPlaces);
         $('body').addClass('stop-scrolling');
         $('.close-display-layer').on('click' , function(event) {
           $('body').removeClass('stop-scrolling');
-          renderMapsections()
+          renderMapsections();
           $('.display-places-options').remove();
         });
       });
@@ -392,7 +390,6 @@ $(() => {
   };
 
   $('.map-id-submit').on('submit', (event) => {
-    console.log('test');
     event.preventDefault();
     $('#map-id').removeClass('show');
     const mapName = $('#id-input').val();
@@ -402,5 +399,6 @@ $(() => {
       createMap(mapLocation, mapName, username);
     }
   });
+
   renderMapsections();
 });
