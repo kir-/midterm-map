@@ -218,6 +218,14 @@ app.get('/favorites/:username', (req, res) => {
 });
 
 
+app.get('/view/:placeId', (req, res) => {
+  db.query(`
+  SELECT latitude, longitude
+  FROM places WHERE id=$1
+  `, [req.params.placeId]).then((response) => {
+    res.send(response.rows[0])
+  })
+})
 
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
