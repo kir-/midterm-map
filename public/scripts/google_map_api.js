@@ -235,6 +235,9 @@ $(() => {
   // event listener most be added first and then to check autho
   const findPlaces = function(map_id) {
     $(`.findPlaces-${map_id}`).on('submit', function(event) {
+      if ($('.display-places-options').length) {
+        $('.display-places-options').remove();
+      }
       event.preventDefault();
       $(`#searchForm${map_id}`).removeClass('show');
       const triggeredElement = $(this);
@@ -247,7 +250,8 @@ $(() => {
         </div>
         </section>
         <div class='id-for-add-place d-none'>${id}</div>
-        <button class='close-display-layer btn mx-auto'>Exit</button>
+        <br>
+        <button class='btn-lg btn-outline-danger ml-2 close-display-layer my-2 my-sm-0 float-right'>Exit</button>
         `;
         const element = $('<div>').addClass('display-places-options');
         element.html(markup);

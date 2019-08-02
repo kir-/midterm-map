@@ -2,10 +2,20 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
+  background-color: beige;
 }
 
+body {
+  background-color: beige !important;
+}
+
+main {
+  background-color: beige;
+}
+
+
 .map {
-  height: 450px;
+  height: 500px;
 }
 
 .map-row {
@@ -15,8 +25,8 @@ html, body {
 
 .marked-places {
   overflow-y:scroll;
-  min-height: 450px;
-  max-height: 450px;
+  min-height: 500px;
+  max-height: 500px;
 }
 
 .display-places-options {
@@ -38,7 +48,7 @@ html, body {
   border-radius: 20px; */
   position:relative;
   overflow:hidden;
-  max-height: 120px;
+  max-height: 140px;
 }
 
 .place-viewer {
@@ -51,6 +61,8 @@ html, body {
 .close-display-layer {
   z-index: 1;
   position: relative;
+  margin-right: 200px;
+
 }
 
 .add-place {
@@ -104,5 +116,8 @@ main {
 }
 
 .map-container {
-  margin-bottom: 30px;
+  /* margin-bottom: 30px; */
+  padding: 40px;
+  /* border-radius: 20px; */
+  /* border:10px groove rgba(148, 137, 137, 0.363); */
 }

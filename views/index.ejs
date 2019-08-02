@@ -1,17 +1,17 @@
 <% include ./partials/_header %>
 <main class='mx-auto main-section'>
   <div class='d-flex justify-content-center mb-5'>
-    <button class='btn btn-success btn-lg' type="button" data-toggle="collapse" data-target="#map-id" aria-expanded="false" aria-controls="map-id">Create/Join New  Map</button>
+    <button class='btn btn-info btn-lg' type="button" data-toggle="collapse" data-target="#map-id" aria-expanded="false" aria-controls="map-id">Create New  Map</button>
   </div>
 
-  <div class="collapse" id="map-id">
+  <div class="collapse mb-3" id="map-id">
       <div class='row d-flex justify-content-center'>
           <form class="form-inline map-id-submit" >
               <div class="form-group mx-sm-3 mb-2">
-                <input type="text" class="form-control" id='id-input' name='map-id' placeholder="Enter map name">
+                <input type="text" class="form-control mr-sm-2" id='id-input' name='map-id' placeholder="Enter map name">
                 <input type="text" class="form-control" id='location-input' name='map-location' placeholder="Enter location">
               </div>
-              <button type="submit" class="btn btn-success mb-2" id='id-submit'>Create map</button>
+              <button type="submit" class="btn btn-info mb-2" id='id-submit'>Create map</button>
           </form>
       </div>
   </div>
@@ -19,8 +19,8 @@
 
 
 
-<div class='map-container'>
-  <!-- <section class='map-element'>
+<!-- <div class='map-container'>
+  <section class='map-element'>
     <p class='map-name'>map name: ${map.name}</p>
     <div class="row map-row">
         <div class="map col-6">
@@ -69,8 +69,8 @@
           </div>
         </div>
 
-  </section> -->
-</div>
+  </section>
+</div> -->
 </main>
 
 
