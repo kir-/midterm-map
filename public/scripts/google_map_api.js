@@ -228,6 +228,30 @@ $(() => {
     });
   };
 
+  const addFavorites = function(mapId) {
+    $(`#favorite${mapId}`).on('click',function() {
+      if ($('.display-username').length) {
+        const username = $('.display-username').text();
+        $.ajax({
+          method: "POST",
+          url: '/userid',
+          data: {
+            username
+          }
+        }).done((userID)=>{
+          $.ajax({
+            method: "POST",
+            url: '/addfavorite',
+            data: {
+              mapId,
+              userID
+            }
+          });
+        });
+      }
+    });
+  };
+
   // event listener most be added first and then to check autho
   const findPlaces = function(map_id) {
     $(`.findPlaces-${map_id}`).on('submit', function(event) {
@@ -294,6 +318,7 @@ $(() => {
 
   const addEventlisterForMap = function(mapId) {
     findPlaces(mapId);
+    addFavorites(mapId);
     addMembers();
   };
 
@@ -321,7 +346,9 @@ $(() => {
   const createHtml = function(map, places) {
     let html = `
       <div id='to-map-${map.id}'></div>
+
       <p class='map-name'>${map.name}  <button class='btn btn-danger' id=favorite${map.id}><i class="far fa-heart"></i></button></p>
+
       <div class="row map-row">
           <div class="map col-5">
           <div class='d-none mapid' data-value='${map.id}'>${map.id}</div>
@@ -337,8 +364,8 @@ $(() => {
         <div class='mapid d-none'>${map.id}</div>
         <button type="button" class="btn btn-danger float-right delete-places-${place.id}"><i class="fas fa-times"></i></button>
         <p class='place-name'>${place.name}</p>
-        <p class='place-rating'>rating: ${place.rating}</p>
-        <p class='place-address'>address: ${place.address}</p>
+        <p class='place-rating'>Rating: ${place.rating}</p>
+        <p class='place-address'>Address: ${place.address}</p>
       </div>
     </section>
       `;

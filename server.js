@@ -76,6 +76,12 @@ app.post("/addmap", (req,res)=>{
   });
 });
 
+app.post("/addfavorite", (req,res)=>{
+  db.query(`INSERT INTO favorites (user_id, map_id) VALUES ($1, $2)`,[req.body.userID, req.body.mapId]).then(()=>{
+    res.send('');
+  });
+});
+
 app.post("/addplace",(req,res)=>{
   db.query(`INSERT INTO places (latitude, longitude, rating, name, type, image, address) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING id`,[req.body.latitude, req.body.longitude, req.body.rating, req.body.name, req.body.type, req.body.image, req.body.address]).then((placeID) => {
     db.query(`INSERT INTO place_on_map (map_id, place_id) VALUES ($1, $2)`,[req.body.mapID, placeID.rows[0].id]).then(()=>{
@@ -85,6 +91,7 @@ app.post("/addplace",(req,res)=>{
 });
 
 app.post("/userid",(req,res) => {
+  console.log('im in baby');
   db.query(`SELECT id FROM users WHERE name = $1`,[req.body.username]).then((userID)=>{
     res.send(String(userID.rows[0].id));
   });
