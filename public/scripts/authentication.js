@@ -25,7 +25,12 @@ $(() => {
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
     `);
     $('.log-out').toggleClass('d-none')
-
+    $("div[aria-labelledby='favorite']").html(`<a class="dropdown-item" href="#">Favorites</a><div class="dropdown-divider"></div>
+         `);
+    $("div[aria-labelledby='Contribution']").html(`
+    <a class="dropdown-item" href="#">Contributions</a>
+            <div class="dropdown-divider"></div>
+    `)
   });
 
 });
