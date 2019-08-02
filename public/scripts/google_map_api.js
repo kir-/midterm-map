@@ -107,7 +107,7 @@ $(() => {
             </ul>
             </br>
             <div class='d-flex justify-content-end'>
-            <button class='btn btn-outline-success mt-2 add-place' id=${placeObj[place].placeId}>add place</button>
+            <button class='btn btn-outline-success mt-2 add-place' data-toggle="modal" data-target="#place-display" id=${placeObj[place].placeId}>add place</button>
             </div>
             <p class='d-none long'>${placeObj[place].long}</p>
             <p class='d-none lat'>${placeObj[place].lat}</p>
@@ -245,14 +245,16 @@ $(() => {
         </div>
         </section>
         <div class='id-for-add-place d-none'>${id}</div>
-        <button class='close-display-layer btn mx-auto'>Exit</button>
+        <br>
+       <button class='btn-lg btn-outline-danger ml-2 close-display-layer my-2 my-sm-0'>x</button>
         `;
         const element = $('<div>').addClass('display-places-options');
         element.html(markup);
         element.appendTo('body');
         getPlaces(triggeredElement.children('.form-group').children('.textQuery').val(),displayPlaces);
-
+        $('body').addClass('stop-scrolling');
         $('.close-display-layer').on('click' , function(event) {
+          $('body').removeClass('stop-scrolling');
           renderMapsections()
           $('.display-places-options').remove();
         });
