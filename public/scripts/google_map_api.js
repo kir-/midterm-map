@@ -5,7 +5,7 @@ $(() => {
       zoom: 16
     });
     for (let place of places) {
-      const loc = {lat: parseFloat(place.latitude), lng: parseFloat(place.longitude)}
+      const loc = {lat: parseFloat(place.latitude), lng: parseFloat(place.longitude)};
       new google.maps.Marker({
         position: loc,
         map: newMap,
@@ -107,7 +107,7 @@ $(() => {
             </ul>
             </br>
             <div class='d-flex justify-content-end'>
-            <button class='btn btn-outline-success mt-2 add-place' id=${placeObj[place].placeId}>add place</button>
+            <button class='btn btn-outline-success mt-2 add-place' data-toggle="modal" data-target="#place-display" id=${placeObj[place].placeId}>add place</button>
             </div>
             <p class='d-none long'>${placeObj[place].long}</p>
             <p class='d-none lat'>${placeObj[place].lat}</p>
@@ -225,8 +225,6 @@ $(() => {
             mapId,
             memberName
           }
-        }).done(() => {
-          // $(`#add-member-${mapId}`).collapse("hide");
         });
       });
     });
@@ -247,47 +245,18 @@ $(() => {
         </div>
         </section>
         <div class='id-for-add-place d-none'>${id}</div>
-        <button class='close-display-layer btn mx-auto'>Exit</button>
+        <br>
+       <button class='btn-lg btn-outline-danger ml-2 close-display-layer my-2 my-sm-0'>x</button>
         `;
         const element = $('<div>').addClass('display-places-options');
         element.html(markup);
         element.appendTo('body');
         getPlaces(triggeredElement.children('.form-group').children('.textQuery').val(),displayPlaces);
-
+        $('body').addClass('stop-scrolling');
         $('.close-display-layer').on('click' , function(event) {
+          $('body').removeClass('stop-scrolling');
           renderMapsections()
           $('.display-places-options').remove();
-
-          // const mapId = triggeredElement.parent().children('.id-for-add-place').text();
-          // const mapObj = {
-          //   id: mapId
-          // };
-
-          // getPlacesFromSql(mapObj, (map,places) => {
-          //   const placeTORender = $(`div[data-value="${mapId}"]`).parent().parent().children('.marked-places')
-          //   placeTORender.html('');
-          //   for (let place of places) {
-          //     console.log("currently working on => ", place);
-          //     const placeElement = $('<section>').addClass('row').addClass('marked-place')
-          //     placeElement.html(`
-          //     <div class='place-imgs col-3'><img class='map-img' src=${place.image}></div>
-          //     <div class='place-details col-9'>
-          //       <button type="button" class="btn btn-danger float-right delete-places"><i class="fas fa-times"></i></button>
-          //       <p class='place-name'>${place.name}</p>
-          //       <p class='place-rating'>rating: ${place.rating}</p>
-          //       <p class='place-address'>address: ${place.address}</p>
-          //     </div>
-          //     `);
-          //     placeTORender.append(placeElement);
-          //   }
-          //   deletePlaces();
-          // });
-
-          // $('.display-places-options').remove();
-
-
-
-
         });
       });
     });
@@ -297,7 +266,6 @@ $(() => {
   const addEventlisterForMap = function(mapId) {
     findPlaces(mapId);
     addMembers();
-    // deletePlaces();
   };
 
   const getPlacesFromSql = function(map, callback) {

@@ -20,7 +20,7 @@ html, body {
 }
 
 .display-places-options {
-  position: absolute;
+  position: fixed;
   height: 100%;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.7);
@@ -51,6 +51,8 @@ html, body {
 .close-display-layer {
   z-index: 1;
   position: relative;
+  bottom: 67vh;
+  left: 8vw;
 }
 
 .add-place {
@@ -105,4 +107,9 @@ main {
 
 .map-container {
   margin-bottom: 30px;
+}
+
+.stop-scrolling {
+  height: 100%;
+  overflow: hidden;
 }
