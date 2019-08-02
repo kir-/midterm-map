@@ -187,7 +187,7 @@ $(() => {
     }
   };
 
-  const deletePlaces = function(placeId) {
+  const deletePlaces = function(placeId, location) {
     $(`.delete-places-${placeId}`).on('click', function() {
       const placeName = $(this).parent().children('.place-name').text();
       const mapId = $(this).parent().children('.mapid').text();
@@ -200,8 +200,13 @@ $(() => {
             placeName
           }
         }).done(() => {
+          const element = $(this).parent().parent().parent().parent().parent().children('.map-row').children('.map')[0];
+
+          getPlacesFromSql({id: mapId},(map, places)=>{
+            loadMap(location, element, places);
+          });
+          $(this).parent().parent().remove();
         });
-        $(this).parent().parent().remove();
       });
     });
   };
@@ -302,7 +307,6 @@ $(() => {
           <a class="dropdown-item" href="#">Contributions</a>
                   <div class="dropdown-divider"></div>
           `)
-          console.log(response) 
           for (let map of response) {
             let mapNameHtml = `
             <a class="dropdown-item" href="#to-map-${map.id}">${map.name}</a>
@@ -326,7 +330,6 @@ $(() => {
         }).done((response) => {
           $("div[aria-labelledby='favorite']").html(`<a class="dropdown-item" href="#">Favorites</a><div class="dropdown-divider"></div>
          `);
-          console.log(response);
           for (let map of response) {
             let mapNameHtml = `
             <a class="dropdown-item" href="#to-map-${map.id}">${map.name}</a>
@@ -368,7 +371,7 @@ $(() => {
               }
             });
         console.log(panorama);
-            
+
         map.setStreetView(panorama);
       });
     })
@@ -413,7 +416,7 @@ $(() => {
     let html = `
       <div id='to-map-${map.id}'></div>
 
-      <p class='map-name'>${map.name}  
+      <p class='map-name'>${map.name}
         <button class='btn btn-danger' id=favorite${map.id}><i class="far fa-heart"></i></button>
         <button class='btn btn-dark re-loaded-map-${map.id}'> <i class="far fa-map"></i></button>
       </p>
@@ -497,11 +500,11 @@ $(() => {
           const mapElement = $(`div[data-value='${map.id}']`).parent()[0];
           const location = {lat: parseFloat(map.latitude), lng: parseFloat(map.longitude)};
           loadMap(location, mapElement, places);
-          reloadMap(map.id,location, mapElement, places)
+          reloadMap(map.id,location, mapElement, places);
 
           //add event listen
           for (let place of places) {
-            deletePlaces(place.id);
+            deletePlaces(place.id,location);
             viewPlace(place.id)
           }
 
