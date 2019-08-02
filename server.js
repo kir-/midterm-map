@@ -49,6 +49,14 @@ app.use("/api/widgets", widgetsRoutes(db));
 // Warning: avoid creating more routes in this file!
 // Separate them into separate routes files (see above).
 app.post("/markup", (req,res)=>{
+  db.query(`SELECT longitude, latitude FROM maps WHERE id = $1`,[req.body.mapid]).then((location)=>{
+    request.post(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${req.body.query}&location=${location.rows[0].latitude}, ${location.rows[0].longitude}&radius=5000&key=AIzaSyCS2HA8sY280xwjwAZbVRoA5hIzfDg41xM`, function(error,response,body) {
+      res.send(body);
+    });
+  });
+});
+
+app.post("/getcity",(req,res)=>{
   request.post(`https://maps.googleapis.com/maps/api/place/textsearch/json?query=${req.body.query}&key=AIzaSyCS2HA8sY280xwjwAZbVRoA5hIzfDg41xM`, function(error,response,body) {
     res.send(body);
   });

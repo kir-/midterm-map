@@ -2,18 +2,17 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: 'Montserrat', sans-serif !important;
-  background-color: beige;
 
+  background-color: rgb(235, 235, 235);
 }
 
 body {
-  font-family: 'Montserrat', sans-serif;
-  background-color: beige !important;
+  background-color: rgb(235, 235, 235) !important;
+
 }
 
 main {
-  background-color: beige;
+  background-color: rgb(235, 235, 235);
 }
 
 
@@ -33,7 +32,7 @@ main {
 }
 
 .display-places-options {
-  position: absolute;
+  position: fixed;
   height: 100%;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.7);
@@ -64,8 +63,9 @@ main {
 .close-display-layer {
   z-index: 1;
   position: relative;
-  margin-right: 200px;
-
+  bottom: 67vh;
+  left: 8vw;
+  height: 5.8%;
 }
 
 .add-place {
@@ -120,6 +120,7 @@ main {
 }
 
 .map-container {
+
   /* margin-bottom: 30px; */
   padding: 15px 10px 15px 40px;
   margin-bottom: 20px;
@@ -146,3 +147,11 @@ main {
   box-shadow: 3px 3px 1px 1px rgba(0, 0, 0, .1);
   border-radius: 20px;
 }
+
+
+
+.stop-scrolling {
+  height: 100%;
+  overflow: hidden;
+}
+

@@ -2,10 +2,10 @@ $(() => {
   const loadMap = function(location, element, places) {
     let newMap = new google.maps.Map(element, {
       center: location,
-      zoom: 16
+      zoom: 14
     });
     for (let place of places) {
-      const loc = {lat: parseFloat(place.latitude), lng: parseFloat(place.longitude)}
+      const loc = {lat: parseFloat(place.latitude), lng: parseFloat(place.longitude)};
       new google.maps.Marker({
         position: loc,
         map: newMap,
@@ -18,7 +18,7 @@ $(() => {
     const locationParsed = location.split(' ').join('+');
     $.ajax({
       method: 'POST',
-      url: "/markup",
+      url: "/getcity",
       data: {
         "query" : locationParsed
       }
@@ -58,13 +58,14 @@ $(() => {
     });
   };
 
-  const getPlaces  = function(options ,callback) {
+  const getPlaces  = function(options, mapid, callback) {
     const urlOption = options.split(' ').join('+');
     $.ajax({
       method: "POST",
       url: "/markup",
       data: {
-        "query" : urlOption
+        "query" : urlOption,
+        "mapid" : mapid
       }
     }).done((placeObject) => {
       let placeList = JSON.parse(placeObject);
@@ -107,7 +108,7 @@ $(() => {
             </ul>
             </br>
             <div class='d-flex justify-content-end'>
-            <button class='btn btn-outline-success mt-2 add-place' id=${placeObj[place].placeId}>add place</button>
+            <button class='btn btn-outline-success mt-2 add-place' data-target="#place-display" id=${placeObj[place].placeId}>add place</button>
             </div>
             <p class='d-none long'>${placeObj[place].long}</p>
             <p class='d-none lat'>${placeObj[place].lat}</p>
@@ -190,9 +191,6 @@ $(() => {
     $(`.delete-places-${placeId}`).on('click', function() {
       const placeName = $(this).parent().children('.place-name').text();
       const mapId = $(this).parent().children('.mapid').text();
-      console.log('here is mapid ' + mapId)
-      console.log('here is placeName ' + placeName)
-
 
       authentication(mapId, () => {
         $.ajax({
@@ -225,8 +223,6 @@ $(() => {
             mapId,
             memberName
           }
-        }).done(() => {
-          // $(`#add-member-${mapId}`).collapse("hide");
         });
       });
     });
@@ -242,8 +238,7 @@ $(() => {
       $(`#searchForm${map_id}`).removeClass('show');
       const triggeredElement = $(this);
       const id = $(this).children('.mapid').text();
-
-      authentication(id, () => {
+      authentication(id, function() {
         const markup = `
         <section class='place-viewer mx-auto'>
         <div class='card-group'>
@@ -251,47 +246,20 @@ $(() => {
         </section>
         <div class='id-for-add-place d-none'>${id}</div>
         <br>
-        <button class='btn-lg btn-outline-danger ml-2 close-display-layer my-2 my-sm-0 float-right'>Exit</button>
+
+       <button class='btn-lg btn-outline-danger ml-2 close-display-layer my-2 my-sm-0'>x</button>
+
         `;
+        const mapid = triggeredElement.children('.mapid').text();
         const element = $('<div>').addClass('display-places-options');
         element.html(markup);
         element.appendTo('body');
-        getPlaces(triggeredElement.children('.form-group').children('.textQuery').val(),displayPlaces);
-
+        getPlaces(triggeredElement.children('.form-group').children('.textQuery').val(), mapid, displayPlaces);
+        $('body').addClass('stop-scrolling');
         $('.close-display-layer').on('click' , function(event) {
-          renderMapsections()
+          $('body').removeClass('stop-scrolling');
+          renderMapsections();
           $('.display-places-options').remove();
-
-          // const mapId = triggeredElement.parent().children('.id-for-add-place').text();
-          // const mapObj = {
-          //   id: mapId
-          // };
-
-          // getPlacesFromSql(mapObj, (map,places) => {
-          //   const placeTORender = $(`div[data-value="${mapId}"]`).parent().parent().children('.marked-places')
-          //   placeTORender.html('');
-          //   for (let place of places) {
-          //     console.log("currently working on => ", place);
-          //     const placeElement = $('<section>').addClass('row').addClass('marked-place')
-          //     placeElement.html(`
-          //     <div class='place-imgs col-3'><img class='map-img' src=${place.image}></div>
-          //     <div class='place-details col-9'>
-          //       <button type="button" class="btn btn-danger float-right delete-places"><i class="fas fa-times"></i></button>
-          //       <p class='place-name'>${place.name}</p>
-          //       <p class='place-rating'>rating: ${place.rating}</p>
-          //       <p class='place-address'>address: ${place.address}</p>
-          //     </div>
-          //     `);
-          //     placeTORender.append(placeElement);
-          //   }
-          //   deletePlaces();
-          // });
-
-          // $('.display-places-options').remove();
-
-
-
-
         });
       });
     });
@@ -301,7 +269,6 @@ $(() => {
   const addEventlisterForMap = function(mapId) {
     findPlaces(mapId);
     addMembers();
-    // deletePlaces();
   };
 
   const getPlacesFromSql = function(map, callback) {
@@ -423,7 +390,6 @@ $(() => {
   };
 
   $('.map-id-submit').on('submit', (event) => {
-    console.log('test');
     event.preventDefault();
     $('#map-id').removeClass('show');
     const mapName = $('#id-input').val();
@@ -433,5 +399,6 @@ $(() => {
       createMap(mapLocation, mapName, username);
     }
   });
+
   renderMapsections();
 });
