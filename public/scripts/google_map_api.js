@@ -289,6 +289,32 @@ $(() => {
     });
   };
 
+  const showContribution = function() {
+    $('#Contribution').on('click', () => {
+
+      if ($('.display-username').length) {
+        const userName = $('.display-username').text();
+        $.ajax({
+          method: "GET",
+          url: `/contributions/${userName}`,
+        }).done( (response) => {
+          console.log(response) 
+          for (let map of response) {
+            let mapNameHtml = `
+            <a class="dropdown-item" href="#to-map-${map.id}">${map.name}</a>
+            <div class="dropdown-divider"></div>
+            `
+            let newHtml = $("div[aria-labelledby='Contribution']").html() + mapNameHtml;
+            $("div[aria-labelledby='Contribution']").html(newHtml);
+          }
+          
+        })
+      }
+
+
+    })
+  }
+
 
   const addEventlisterForMap = function(mapId) {
     findPlaces(mapId);
@@ -319,7 +345,9 @@ $(() => {
 
   const createHtml = function(map, places) {
     let html = `
-      <p class='map-name'>${map.name}  <button class='btn btn-danger' id=favorite${map.id}><i class="far fa-heart"></i></button></p>
+      <div id='to-map-${map.id}'></div>
+      <p class='map-name'>${map.name}</p>
+
       <div class="row map-row">
           <div class="map col-5">
           <div class='d-none mapid' data-value='${map.id}'>${map.id}</div>
@@ -408,9 +436,11 @@ $(() => {
 
 
           addEventlisterForMap(map.id);
+          // showContribution();
         });
       }
 
+      showContribution();
     });
   };
 
@@ -424,6 +454,5 @@ $(() => {
       createMap(mapLocation, mapName, username);
     }
   });
-
   renderMapsections();
 });
