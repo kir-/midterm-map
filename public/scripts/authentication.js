@@ -11,6 +11,8 @@ $(() => {
         </span>
         `;
         $('.login-form').html(content);
+        $('.login-form').children('button').toggleClass('d-none')
+        $('.log-out').toggleClass('d-none')
 
       }
     });
@@ -22,5 +24,8 @@ $(() => {
       <input class="form-control mr-sm-2" name='password' id='password'type="password" placeholder="Password">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Login</button>
     `);
+    $('.log-out').toggleClass('d-none')
+
   });
+
 });
