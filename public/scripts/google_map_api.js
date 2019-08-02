@@ -2,7 +2,7 @@ $(() => {
   const loadMap = function(location, element, places) {
     let newMap = new google.maps.Map(element, {
       center: location,
-      zoom: 16
+      zoom: 14
     });
     for (let place of places) {
       const loc = {lat: parseFloat(place.latitude), lng: parseFloat(place.longitude)};
@@ -108,7 +108,7 @@ $(() => {
             </ul>
             </br>
             <div class='d-flex justify-content-end'>
-            <button class='btn btn-outline-success mt-2 add-place' data-toggle="modal" data-target="#place-display" id=${placeObj[place].placeId}>add place</button>
+            <button class='btn btn-outline-success mt-2 add-place' data-target="#place-display" id=${placeObj[place].placeId}>add place</button>
             </div>
             <p class='d-none long'>${placeObj[place].long}</p>
             <p class='d-none lat'>${placeObj[place].lat}</p>
