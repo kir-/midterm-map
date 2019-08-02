@@ -321,7 +321,7 @@ $(() => {
   const createHtml = function(map, places) {
     let html = `
       <div id='to-map-${map.id}'></div>
-      <p class='map-name'>${map.name}</p>
+      <p class='map-name'>${map.name}  <button class='btn btn-danger' id=favorite${map.id}><i class="far fa-heart"></i></button></p>
       <div class="row map-row">
           <div class="map col-5">
           <div class='d-none mapid' data-value='${map.id}'>${map.id}</div>
