@@ -39,6 +39,8 @@ Wikimap
 
 Wikimaps is a map generator that enables users to create maps and add destinations they would like to save on each map. They can favorite maps and go to streetview and see the location rendered visually with a 360 pano. This project is a result of a midterm project for Lighthouse labs Bootcamp where we were given 5 days to create a web app that function around the our general premise which for this project was the creating of maps. Warning user login fuctionality is not secure as it was not our priority.
 
+username: visitor and password: 123
+
 Main screen
 ![Screenshot](https://raw.githubusercontent.com/kir-/midterm-map/master/images/Screen%20Shot%202019-08-02%20at%2011.58.44%20PM.png)
 
