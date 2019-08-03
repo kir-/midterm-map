@@ -1,4 +1,4 @@
-LHL Node Skeleton
+Wikimap
 =========
 
 ## Project Setup
@@ -34,6 +34,13 @@ LHL Node Skeleton
 - Use the `npm run db:reset` command each time there is a change to the database schema or seeds. 
   - It runs through each of the files, in order, and executes them against the database. 
   - Note: you will lose all newly created (test) data each time this is run, since the schema files will tend to `DROP` the tables and recreate them.
+
+## Description
+
+Wikimaps is a map generator that enables users to create maps and add destinations they would like to save on each map. They can favorite maps and go to streetview and see the location rendered visually with a 360 pano. This project is a result of a midterm project for Lighthouse labs Bootcamp where we were given 5 days to create a web app that function around the our general premise which for this project was the creating of maps. Warning user login fuctionality is not secure as it was not our priority.
+
+Main screen
+![Screenshot](screenshot.png)
 
 ## Dependencies
 
